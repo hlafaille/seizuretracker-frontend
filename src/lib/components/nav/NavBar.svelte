@@ -1,6 +1,7 @@
 <script>
 	import { browser } from '$app/environment';
-	import { cubicOut } from 'svelte/easing';
+
+	/**@type {string}*/
 	export let navbarTitle = 'SeizureTracker';
 
 	/**@type {HTMLElement | null}*/
@@ -11,6 +12,9 @@
 	/**@type {boolean} If the drawer is enabled*/
 	let drawerEnabled = false;
 
+	/**
+	 * Simply toggles `drawerEnabled`
+	 */
 	function toggleHamburger() {
 		console.log(drawerEnabled);
 		if (drawerEnabled) {
@@ -28,7 +32,9 @@
 	</div>
 	{#if drawerEnabled}
 		<div id="drawer" class="nav-drawer">
-			<slot name="items" />
+			<div class="nav-drawer-list">
+				<slot />
+			</div>
 		</div>
 		<div id="drawer-bg" class="nav-drawer-bg" />
 	{/if}
@@ -39,12 +45,12 @@
 		@apply flex;
 	}
 	.navbar {
-		@apply bg-neutral-300 dark:bg-neutral-700;
+		@apply bg-neutral-200 dark:bg-neutral-700;
 		@apply w-full p-3 drop-shadow-lg;
-		@apply border-b-2 border-l-2 border-r-2 border-neutral-200 dark:border-neutral-600/25;
+		@apply border-b-2 border-l-2 border-r-2 border-neutral-300 dark:border-neutral-600/25;
 		@apply fixed left-0 right-0 top-0;
-		@apply flex flex-row;
-		@apply text-neutral-500 dark:text-neutral-100;
+		@apply flex;
+		@apply text-neutral-600 dark:text-neutral-100;
 		z-index: 10;
 	}
 
@@ -68,5 +74,11 @@
 	.nav-drawer-bg {
 		@apply absolute h-full w-screen bg-neutral-400/50 dark:bg-neutral-900/50 backdrop-blur-lg;
 		z-index: 2;
+	}
+
+	.nav-drawer .nav-drawer-list {
+		@apply mt-[3.5rem];
+		@apply w-full;
+		@apply flex flex-col;
 	}
 </style>

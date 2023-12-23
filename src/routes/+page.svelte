@@ -1,15 +1,11 @@
 <script>
-	import NavBar from './components/nav/NavBar.svelte';
+	import NavBar from '$lib/components/nav/NavBar.svelte';
+	import NavBarDrawerListItem from '$lib/components/nav/NavBarDrawerListItem.svelte';
 </script>
 
 <NavBar>
-	<div slot="items">
-		<a href="#">Test</a>
-		<a href="#">Test</a>
-		<a href="#">Test</a>
-		<a href="#">Test</a>
-		<a href="#">Test</a>
-	</div>
+	<NavBarDrawerListItem id="home" text="Home" url="/home"></NavBarDrawerListItem>
+	<NavBarDrawerListItem id="logDashboard" text="Log Dashboard" url="/logDasboard"></NavBarDrawerListItem>
 </NavBar>
 
 <style lang="postcss">
