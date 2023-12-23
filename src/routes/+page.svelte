@@ -1,15 +1,19 @@
 <script>
-	import Card from './components/Card.svelte';
+	import NavBar from './components/nav/NavBar.svelte';
 </script>
 
-<html lang="en">
-	<Card title="Hello World">
-		<p>Poop</p>
-	</Card>
-</html>
+<NavBar>
+	<div slot="items">
+		<a href="#">Test</a>
+		<a href="#">Test</a>
+		<a href="#">Test</a>
+		<a href="#">Test</a>
+		<a href="#">Test</a>
+	</div>
+</NavBar>
 
 <style lang="postcss">
 	:global(html) {
-		background-color: theme(colors.gray.100);
+		@apply bg-neutral-50 dark:bg-neutral-800;
 	}
 </style>

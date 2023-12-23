@@ -1,0 +1,72 @@
+<script>
+	import { browser } from '$app/environment';
+	import { cubicOut } from 'svelte/easing';
+	export let navbarTitle = 'SeizureTracker';
+
+	/**@type {HTMLElement | null}*/
+	if (browser) {
+		let navBarDrawer = document.getElementById('navBarDrawer');
+	}
+
+	/**@type {boolean} If the drawer is enabled*/
+	let drawerEnabled = false;
+
+	function toggleHamburger() {
+		console.log(drawerEnabled);
+		if (drawerEnabled) {
+			drawerEnabled = false;
+		} else {
+			drawerEnabled = true;
+		}
+	}
+</script>
+
+<div class="nav-container">
+	<div class="navbar">
+		<button id="navBarHamburger" on:click={toggleHamburger} class="navbar-hamburger">☰</button>
+		<h3 class="navbar-title">{navbarTitle}</h3>
+	</div>
+	{#if drawerEnabled}
+		<div id="drawer" class="nav-drawer">
+			<slot name="items" />
+		</div>
+		<div id="drawer-bg" class="nav-drawer-bg" />
+	{/if}
+</div>
+
+<style lang="postcss">
+	.nav-container {
+		@apply flex;
+	}
+	.navbar {
+		@apply bg-neutral-300 dark:bg-neutral-700;
+		@apply w-full p-3 drop-shadow-lg;
+		@apply border-b-2 border-l-2 border-r-2 border-neutral-200 dark:border-neutral-600/25;
+		@apply fixed left-0 right-0 top-0;
+		@apply flex flex-row;
+		@apply text-neutral-500 dark:text-neutral-100;
+		z-index: 10;
+	}
+
+	.navbar-title {
+		@apply w-min truncate whitespace-nowrap pl-4 pr-4 text-2xl font-bold;
+		@apply select-none;
+	}
+
+	.navbar .navbar-hamburger {
+		@apply w-auto truncate whitespace-nowrap text-2xl font-black  transition-colors hover:text-neutral-400;
+		@apply select-none;
+	}
+
+	.nav-drawer {
+		@apply absolute h-full w-screen bg-neutral-300 dark:bg-neutral-900 text-white lg:w-96;
+		@apply border-r-2 border-neutral-600/50;
+		@apply flex flex-col space-y-4 drop-shadow-2xl;
+		z-index: 3;
+	}
+
+	.nav-drawer-bg {
+		@apply absolute h-full w-screen bg-neutral-400/50 dark:bg-neutral-900/50 backdrop-blur-lg;
+		z-index: 2;
+	}
+</style>
