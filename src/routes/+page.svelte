@@ -8,8 +8,4 @@
 	<NavBarDrawerListItem id="logDashboard" text="Log Dashboard" url="/logDasboard"></NavBarDrawerListItem>
 </NavBar>
 
-<style lang="postcss">
-	:global(html) {
-		@apply bg-neutral-50 dark:bg-neutral-800;
-	}
-</style>
+<style></style>

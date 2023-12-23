@@ -1,9 +1,11 @@
 <script>
-	/**@type {String} */
+	/**@type {string} */
 	export let title;
+	/**@type {string}*/
+	export let sizingClass;
 </script>
 
-<div class="card">
+<div class="card {sizingClass}">
 	<div class="card-content">
 		<h3 class="card-title">{title}</h3>
 		<slot />
@@ -12,14 +14,14 @@
 
 <style lang="postcss">
 	.card {
-		@apply bg-neutral-700;
-		@apply border-2 border-neutral-600/25;
+		@apply bg-neutral-100 dark:bg-neutral-700;
+		@apply border-2 border-neutral-50 dark:border-neutral-600;
 		@apply flex rounded-lg p-6 drop-shadow-2xl;
-		@apply h-full w-full;
+		@apply text-neutral-700 dark:text-white;
 	}
 
 	.card-title {
-		@apply truncate whitespace-nowrap text-3xl font-bold text-white drop-shadow-lg;
+		@apply text-2xl font-black;
 		@apply select-none;
 	}
 

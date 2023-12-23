@@ -1,10 +1,13 @@
 <script>
+	import Card from '$lib/components/cards/Card.svelte';
 	import FlexCenterContainer from '$lib/components/containers/FlexCenterContainer.svelte';
-	import NavBar from '$lib/components/nav/NavBar.svelte';
-	import 'FlexCenterContainer';
 </script>
 
-<NavBar />
-<FlexCenterContainer></FlexCenterContainer>
+<FlexCenterContainer>
+	<div class="m-2">
+		<Card title="Welcome" sizingClass="w-full lg:w-96"></Card>
+	</div>
+</FlexCenterContainer>
 
-<style lang="postcss"></style>
+<style lang="postcss">
+</style>

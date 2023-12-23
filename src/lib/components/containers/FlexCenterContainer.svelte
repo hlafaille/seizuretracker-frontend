@@ -6,14 +6,7 @@
 
 <style lang="postcss">
 	.flex-center {
-		@apply flex items-center justify-center;
-		height: 100vh;
-		width: 100vw;
-	}
-
-	.flex-center * {
-		max-width: 100vw;
-		max-height: 100vh;
+		@apply flex items-center justify-center w-full h-full;
 	}
 
 	.flex-center.flex-center-base-z * {
