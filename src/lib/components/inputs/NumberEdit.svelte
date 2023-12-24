@@ -8,12 +8,12 @@
 </script>
 
 <div class="line-edit">
-	<input id="{id}LineEdit" bind:value={text} {placeholder} type="text" />
+	<input id="{id}LineEdit" bind:value={text} {placeholder} type="number" />
 </div>
 
 <style lang="postcss">
 	.line-edit {
-		input[type='text'] {
+		input[type='number'] {
 			outline: none;
 			-webkit-appearance: none; /* for Chrome, Safari, and Opera */
 			-moz-appearance: none; /* for Firefox */
