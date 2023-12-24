@@ -1,6 +1,6 @@
 <script>
 	import Button from '$lib/components/buttons/Button.svelte';
-	import { sendPostRequest } from '$lib/util/requestHandler';
+	import { sendPostRequest } from '$lib/utils/requestHandler/requestSender';
 	import Card from '$lib/components/cards/Card.svelte';
 	import FlexCenterContainer from '$lib/components/containers/FlexCenterContainer.svelte';
 	import LineEdit from '$lib/components/inputs/LineEdit.svelte';
@@ -9,6 +9,8 @@
 	import { error } from '@sveltejs/kit';
 	import Modal from '$lib/components/modals/Modal.svelte';
 	import AlertCodeBlock from '$lib/components/alerts/AlertCodeBlock.svelte';
+	import EmailLineEdit from '$lib/components/inputs/EmailLineEdit.svelte';
+	import PasswordLineEdit from '$lib/components/inputs/PasswordLineEdit.svelte';
 	/** @type {{ email: string | undefined, password: string | undefined }} */
 	let requestPayload = {
 		email: undefined,
@@ -38,7 +40,7 @@
 		let response = null;
 		isLoading = true;
 		try {
-			response = await sendPostRequest('http://localhost:8080/v1/auth/session', requestPayload);
+			response = await sendPostRequest('http://localhost:8080/v1/auth/session', requestPayload, false);
 		} catch (e /**@type {Error} */) {
 			errorMessage = e.message;
 		} finally {
@@ -76,8 +78,8 @@
 		<div class={isLoading ? 'animate-pulse' : ''}>
 			<Card title="Welcome">
 				<div class="flex flex-col space-y-2">
-					<LineEdit id="emailAddress" placeholder="Email" bind:text={requestPayload.email} />
-					<LineEdit id="password" placeholder="Password" bind:text={requestPayload.password} />
+					<EmailLineEdit id="emailAddress" placeholder="Email" bind:text={requestPayload.email} />
+					<PasswordLineEdit id="password" placeholder="Password" bind:text={requestPayload.password} />
 					<Button id="logIn" text="Log In" on:click={doLogin} />
 				</div>
 			</Card>
