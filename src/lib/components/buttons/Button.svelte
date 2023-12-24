@@ -5,7 +5,7 @@
 	export let text;
 </script>
 
-<button id="{id}Button" class="button">{text}</button>
+<button id="{id}Button" class="button" on:click>{text}</button>
 
 <style lang="postcss">
 	.button {

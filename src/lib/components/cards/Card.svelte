@@ -2,7 +2,7 @@
 	/**@type {string} */
 	export let title;
 	/**@type {string}*/
-	export let sizingClass;
+	export let sizingClass = '';
 </script>
 
 <div class="card {sizingClass}">
