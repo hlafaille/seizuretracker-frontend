@@ -1,11 +1,14 @@
 <script>
 	import Button from '$lib/components/buttons/Button.svelte';
 	import { sendPostRequest } from '$lib/utils/requestHandler/requestSender';
+	import { sendPostRequest } from '$lib/utils/requestHandler/requestSender';
 	import Card from '$lib/components/cards/Card.svelte';
 	import FlexCenterContainer from '$lib/components/containers/FlexCenterContainer.svelte';
 	import { goto } from '$app/navigation';
 	import Modal from '$lib/components/modals/Modal.svelte';
 	import AlertCodeBlock from '$lib/components/alerts/AlertCodeBlock.svelte';
+	import EmailLineEdit from '$lib/components/inputs/EmailLineEdit.svelte';
+	import PasswordLineEdit from '$lib/components/inputs/PasswordLineEdit.svelte';
 	import EmailLineEdit from '$lib/components/inputs/EmailLineEdit.svelte';
 	import PasswordLineEdit from '$lib/components/inputs/PasswordLineEdit.svelte';
 	/** @type {{ email: string | undefined, password: string | undefined }} */
@@ -77,6 +80,8 @@
 		<div class={isLoading ? 'animate-pulse' : ''}>
 			<Card title="Welcome">
 				<div class="flex flex-col space-y-2">
+					<EmailLineEdit id="emailAddress" placeholder="Email" bind:text={requestPayload.email} />
+					<PasswordLineEdit id="password" placeholder="Password" bind:text={requestPayload.password} />
 					<EmailLineEdit id="emailAddress" placeholder="Email" bind:text={requestPayload.email} />
 					<PasswordLineEdit id="password" placeholder="Password" bind:text={requestPayload.password} />
 					<Button id="logIn" text="Log In" on:click={doLogin} />

@@ -48,6 +48,7 @@
 			</div>
 		</div>
 		<div role="button" tabindex="0" on:keydown={handleKeyPress} on:click={toggleModal} class="modal-bg"></div>
+		<div role="button" tabindex="0" on:keydown={handleKeyPress} on:click={toggleModal} class="modal-bg"></div>
 	</div>
 {/if}
 
@@ -56,10 +57,15 @@
 		@apply absolute bg-neutral-900/50 backdrop-blur-md p-2 w-screen h-screen;
 	}
 
+	.modal-bg {
+		@apply absolute bg-neutral-900/50 backdrop-blur-md p-2 w-screen h-screen;
+	}
+
 	.modal-container {
 		@apply absolute w-screen h-screen left-0 top-0 flex items-center justify-center p-2;
 		z-index: 20;
 	}
+
 
 	.modal {
 		@apply bg-neutral-100 dark:bg-neutral-700;
@@ -82,6 +88,7 @@
 	.modal-close-button {
 		@apply text-neutral-600 hover:text-neutral-500 text-xl font-black h-min w-min;
 		@apply transition-all;
+		/* @apply hidden sm:block; */
 		/* @apply hidden sm:block; */
 	}
 </style>
