@@ -6,6 +6,6 @@
 
 <style lang="postcss">
 	:global(html) {
-		@apply bg-neutral-50 dark:bg-neutral-800;
+		@apply bg-neutral-100 dark:bg-neutral-800;
 	}
 </style>

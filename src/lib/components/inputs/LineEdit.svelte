@@ -2,11 +2,13 @@
 	/**@type {string}*/
 	export let id;
 	/**@type {string}*/
-	export let placeholder;
+	export let placeholder = '';
+	/**@type {string}*/
+	export let text = '';
 </script>
 
 <div class="line-edit">
-	<input id="{id}LineEdit" {placeholder} type="text" />
+	<input id="{id}LineEdit" bind:value={text} {placeholder} type="text" />
 </div>
 
 <style lang="postcss">

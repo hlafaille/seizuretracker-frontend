@@ -21,7 +21,7 @@
 	}
 
 	.card-title {
-		@apply text-2xl font-black pb-2;
+		@apply text-3xl font-black pb-2;
 		@apply select-none;
 	}
 
