@@ -3,6 +3,7 @@
 	import Card from '$lib/components/tk/cards/Card.svelte';
 	import NavBar from '$lib/components/tk/nav/NavBar.svelte';
 	import NavBarDrawerListItem from '$lib/components/tk/nav/NavBarDrawerListItem.svelte';
+	import MoodCard from '$lib/components/home/MoodCard.svelte';
 
 	/** ENUMS */
 	enum NavBarDrawerListPages {
@@ -35,13 +36,15 @@
 	/>
 </NavBar>
 <FlexCenterContainer>
-	{#if currentPage === NavBarDrawerListPages.HOME}
-		<Card title="Mood Survey"></Card>
-	{:else if currentPage === NavBarDrawerListPages.LOG_DASHBOARD}
-		<Card title="Log Dashboard"></Card>
-	{:else if currentPage === NavBarDrawerListPages.MEDICATION}
-		<Card title="Medication"></Card>
-	{/if}
+	<div class="p-2">
+		{#if currentPage === NavBarDrawerListPages.HOME}
+			<MoodCard />
+		{:else if currentPage === NavBarDrawerListPages.LOG_DASHBOARD}
+			<Card title="Log Dashboard"></Card>
+		{:else if currentPage === NavBarDrawerListPages.MEDICATION}
+			<Card title="Medication"></Card>
+		{/if}
+	</div>
 </FlexCenterContainer>
 
 <style></style>

@@ -1,3 +1,0 @@
-FROM mcr.microsoft.com/devcontainers/base:bookworm
-FROM mcr.microsoft.com/devcontainers/base:bookworm
-RUN curl -fsSL https://bun.sh/install | bash

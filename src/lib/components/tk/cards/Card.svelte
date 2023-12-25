@@ -1,11 +1,15 @@
 <script lang="ts">
 	export let title: string;
+	export let subtitle: string | null = null;
 	export let sizingClass: string = '';
 </script>
 
 <div class="card {sizingClass}">
 	<div class="card-content">
 		<h3 class="card-title">{title}</h3>
+		{#if subtitle}
+			<p class="card-subtitle">{subtitle}</p>
+		{/if}
 		<slot />
 	</div>
 </div>
@@ -19,7 +23,12 @@
 	}
 
 	.card-title {
-		@apply pb-2 text-3xl font-black;
+		@apply text-3xl font-black;
+		@apply select-none;
+	}
+	.card-subtitle {
+		@apply pb-2 font-semibold;
+		@apply text-neutral-300;
 		@apply select-none;
 	}
 
