@@ -4,16 +4,9 @@
 
 	export let id: string;
 	export let text: string;
-	export let url: string;
 </script>
 
-<button
-	id={id + 'NavBarDrawerListItem'}
-	class="nav-drawer-list-item"
-	on:click={function () {
-		goto(url);
-	}}>{text}</button
->
+<button id={id + 'NavBarDrawerListItem'} class="nav-drawer-list-item" on:click>{text}</button>
 
 <style lang="postcss">
 	.nav-drawer-list-item {

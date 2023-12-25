@@ -5,12 +5,12 @@
 	import FlexCenterContainer from '$lib/components/containers/FlexCenterContainer.svelte';
 	import { goto } from '$app/navigation';
 	import Modal from '$lib/components/modals/Modal.svelte';
-	import AlertCodeBlock from '$lib/components/alerts/AlertCodeBlock.svelte';
+	import AlertCodeBlock from '$lib/components/tk/alerts/AlertCodeBlock.svelte';
 	import EmailLineEdit from '$lib/components/inputs/EmailLineEdit.svelte';
 	import PasswordLineEdit from '$lib/components/inputs/PasswordLineEdit.svelte';
 	import LineEdit from '$lib/components/inputs/LineEdit.svelte';
 	import CreateAccountModal from './CreateAccountModal.svelte';
-	import AlertSuccess from '$lib/components/alerts/AlertSuccess.svelte';
+	import AlertSuccess from '$lib/components/tk/alerts/AlertSuccess.svelte';
 	let loginRequestPayload: { email: string | undefined; password: string | undefined } = {
 		email: undefined,
 		password: undefined

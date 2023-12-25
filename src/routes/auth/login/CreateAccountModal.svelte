@@ -1,5 +1,5 @@
 <script lang="ts">
-	import AlertDanger from '$lib/components/alerts/AlertDanger.svelte';
+	import AlertDanger from '$lib/components/tk/alerts/AlertDanger.svelte';
 	import Button from '$lib/components/buttons/Button.svelte';
 	import EmailLineEdit from '$lib/components/inputs/EmailLineEdit.svelte';
 	import LineEdit from '$lib/components/inputs/LineEdit.svelte';

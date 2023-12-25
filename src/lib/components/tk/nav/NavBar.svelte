@@ -5,35 +5,34 @@
 	if (browser) {
 		let navBarDrawer: HTMLElement | null = document.getElementById('navBarDrawer');
 	}
-	let drawerEnabled: boolean = false;
+	export let isDrawerActive: boolean = false;
 
 	/**
 	 * Simply toggles `drawerEnabled`
 	 */
 	function toggleHamburger() {
-		console.log(drawerEnabled);
-		if (drawerEnabled) {
-			drawerEnabled = false;
+		console.log(isDrawerActive);
+		if (isDrawerActive) {
+			isDrawerActive = false;
 		} else {
-			drawerEnabled = true;
+			isDrawerActive = true;
 		}
 	}
 </script>
 
-<div class="nav-container">
-	<div class="navbar">
-		<button id="navBarHamburger" on:click={toggleHamburger} class="navbar-hamburger">☰</button>
-		<h3 class="navbar-title">{navbarTitle}</h3>
-	</div>
-	{#if drawerEnabled}
-		<div id="drawer" class="nav-drawer">
-			<div class="nav-drawer-list">
-				<NavBarDrawerUserSection />
-				<slot />
-			</div>
+{#if isDrawerActive}
+	<div id="drawer-bg" class="nav-drawer-bg" />
+	<div id="drawer" class="nav-drawer">
+		<div class="nav-drawer-list">
+			<NavBarDrawerUserSection />
+			<slot />
 		</div>
-		<div id="drawer-bg" class="nav-drawer-bg" />
-	{/if}
+	</div>
+{/if}
+
+<div class="navbar">
+	<button id="navBarHamburger" on:click={toggleHamburger} class="navbar-hamburger">☰</button>
+	<h3 class="navbar-title">{navbarTitle}</h3>
 </div>
 
 <style lang="postcss">
@@ -43,8 +42,7 @@
 	.navbar {
 		@apply bg-neutral-200 dark:bg-neutral-700;
 		@apply w-full p-3 drop-shadow-lg;
-		@apply border-b-2 border-l-2 border-r-2 border-neutral-300 dark:border-neutral-600/25;
-		@apply fixed left-0 right-0 top-0;
+		@apply fixed border-b-2 border-l-2 border-r-2 border-neutral-300 dark:border-neutral-600/25;
 		@apply flex;
 		@apply text-neutral-600 dark:text-neutral-100;
 		z-index: 10;
@@ -61,15 +59,15 @@
 	}
 
 	.nav-drawer {
-		@apply absolute h-full w-screen bg-neutral-300 text-white lg:w-96 dark:bg-neutral-900;
+		@apply fixed h-full w-screen bg-neutral-300 text-white lg:w-96 dark:bg-neutral-900;
 		@apply border-r-2 border-neutral-600/50;
 		@apply flex flex-col space-y-4 drop-shadow-2xl;
-		z-index: 3;
+		z-index: 9;
 	}
 
 	.nav-drawer-bg {
-		@apply absolute h-full w-screen bg-neutral-400/50 backdrop-blur-lg dark:bg-neutral-900/50;
-		z-index: 2;
+		@apply fixed h-full w-screen bg-neutral-400/50 backdrop-blur-lg dark:bg-neutral-900/50;
+		z-index: 8;
 	}
 
 	.nav-drawer .nav-drawer-list {
