@@ -33,7 +33,7 @@
 {#if isActive}
 	<div class="modal-container">
 		<div class="modal {sizingClass}">
-			<div class="flex flex-col w-full">
+			<div class="flex w-full flex-col">
 				<div class="flex flex-row">
 					<h3 class="modal-title">{title}</h3>
 					<button class="modal-close-button" on:click={toggleModal}>X</button>
@@ -48,24 +48,24 @@
 
 <style lang="postcss">
 	.modal-bg {
-		@apply absolute bg-neutral-900/10 backdrop-blur-md p-2 w-screen h-screen;
+		@apply absolute h-screen w-screen bg-neutral-900/20 p-2 backdrop-blur-lg;
 	}
 
 	.modal-container {
-		@apply absolute w-screen h-screen left-0 top-0 flex items-center justify-center p-2;
+		@apply absolute left-0 top-0 flex h-screen w-screen items-center justify-center p-2;
 		z-index: 20;
 	}
 
 	.modal {
-		@apply bg-neutral-100 dark:bg-neutral-700;
-		@apply border-2 border-neutral-50 dark:border-neutral-600;
+		@apply bg-neutral-100/30 backdrop-blur-lg dark:bg-neutral-700/30;
+		@apply border-2 border-neutral-50/30 dark:border-neutral-600/30;
 		@apply flex rounded-lg p-6 drop-shadow-2xl;
-		@apply text-neutral-700 dark:text-white;
+		@apply text-neutral-600 dark:text-white;
 		z-index: 30;
 	}
 
 	.modal-title {
-		@apply text-3xl font-black pb-2;
+		@apply pb-2 text-3xl font-black;
 		@apply select-none;
 		@apply w-full;
 	}
@@ -75,7 +75,7 @@
 	}
 
 	.modal-close-button {
-		@apply text-neutral-300 hover:text-neutral-200 dark:text-neutral-600 dark:hover:text-neutral-500 text-xl font-black h-min w-min;
+		@apply hover:text-neutral-00 h-min w-min text-xl font-black text-neutral-400 dark:text-neutral-600 dark:hover:text-neutral-500;
 		@apply transition-all;
 	}
 </style>

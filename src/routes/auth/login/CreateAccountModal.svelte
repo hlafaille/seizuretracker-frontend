@@ -39,6 +39,7 @@
 	 */
 	export let errorMessage: string | null = null;
 	export let inFlight: boolean = false;
+	export let isActive: boolean = false;
 	let response: Response | null = null;
 	let requestPayload: CreateAccountRequest = {
 		firstName: undefined,
@@ -81,8 +82,8 @@
 	}
 </script>
 
-<Modal title="Create an Account">
-	<div class="grid grid-rows-auto gap-2">
+<Modal title="Create an Account" bind:isActive>
+	<div class="grid-rows-auto grid gap-2">
 		{#if errorMessage}
 			<AlertDanger on:click={clearErrorMessage} text={errorMessage} />
 		{/if}

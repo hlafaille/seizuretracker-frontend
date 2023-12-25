@@ -19,7 +19,7 @@
 	}
 
 	.card-title {
-		@apply text-3xl font-black pb-2;
+		@apply pb-2 text-3xl font-black;
 		@apply select-none;
 	}
 

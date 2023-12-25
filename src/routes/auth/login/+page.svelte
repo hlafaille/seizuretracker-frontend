@@ -32,7 +32,7 @@
 
 	let isLoading: boolean = false;
 
-	let createAccountModalActive: boolean = false;
+	let isCreateAccountModalActive: boolean = false;
 
 	let newAccountCreated: boolean = false;
 
@@ -40,7 +40,7 @@
 	 * Toggles the CreateAccount modal
 	 */
 	function toggleCreateAccountModal() {
-		createAccountModalActive = !createAccountModalActive;
+		isCreateAccountModalActive = !isCreateAccountModalActive;
 	}
 
 	/**
@@ -104,13 +104,11 @@
 {/if}
 
 <!-- Create Account Modal -->
-{#if createAccountModalActive}
-	<CreateAccountModal on:accountCreated={handleOnAccountCreated} />
-{/if}
+<CreateAccountModal on:accountCreated={handleOnAccountCreated} bind:isActive={isCreateAccountModalActive} />
 
 <!-- Page Content (login card, etc) -->
 <FlexCenterContainer>
-	<div class="m-4 w-full md:w-96 space-y-2">
+	<div class="m-4 w-full space-y-2 md:w-96">
 		<div class={isLoading ? 'animate-pulse' : ''}>
 			<Card title="Welcome">
 				<!-- Account Created Alert -->

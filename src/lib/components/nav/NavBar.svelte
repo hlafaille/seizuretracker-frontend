@@ -61,14 +61,14 @@
 	}
 
 	.nav-drawer {
-		@apply absolute h-full w-screen bg-neutral-300 dark:bg-neutral-900 text-white lg:w-96;
+		@apply absolute h-full w-screen bg-neutral-300 text-white lg:w-96 dark:bg-neutral-900;
 		@apply border-r-2 border-neutral-600/50;
 		@apply flex flex-col space-y-4 drop-shadow-2xl;
 		z-index: 3;
 	}
 
 	.nav-drawer-bg {
-		@apply absolute h-full w-screen bg-neutral-400/50 dark:bg-neutral-900/50 backdrop-blur-lg;
+		@apply absolute h-full w-screen bg-neutral-400/50 backdrop-blur-lg dark:bg-neutral-900/50;
 		z-index: 2;
 	}
 

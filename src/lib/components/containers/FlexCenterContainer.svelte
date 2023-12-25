@@ -6,7 +6,7 @@
 
 <style lang="postcss">
 	.flex-center {
-		@apply flex items-center justify-center w-full h-full;
+		@apply flex h-full w-full items-center justify-center;
 	}
 
 	.flex-center.flex-center-base-z * {

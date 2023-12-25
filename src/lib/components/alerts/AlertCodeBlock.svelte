@@ -12,7 +12,7 @@
 		@apply overflow-y-auto;
 		@apply bg-gray-700;
 		@apply border-2 border-gray-500;
-		@apply break-words text-base font-mono font-bold text-neutral-500 drop-shadow-lg;
+		@apply break-words font-mono text-base font-bold text-neutral-500 drop-shadow-lg;
 		@apply rounded-lg p-2 drop-shadow-md;
 	}
 </style>
