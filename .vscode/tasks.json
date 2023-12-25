@@ -3,10 +3,13 @@
 	"tasks": [
 		{
 			"type": "bun",
-			"script": "format",
+			"script": "prettier --write ${file}",
 			"problemMatcher": [],
-			"label": "npm: format",
-			"detail": "prettier --write ."
+			"label": "bun: format",
+			"detail": "bun run prettier --write . - package.json",
+			"presentation": {
+				"reveal": "silent",
+			}
 		}
 	]
 }
