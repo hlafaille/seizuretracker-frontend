@@ -1,5 +1,5 @@
-<script>
-	export let text = 'Unspecified';
+<script lang="ts">
+	export let text: string = 'Unspecified';
 </script>
 
 <div class="alert-success">{text}</div>

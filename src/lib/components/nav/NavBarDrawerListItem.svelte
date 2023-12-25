@@ -1,13 +1,10 @@
-<script>
+<script lang="ts">
 	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
 
-	/**@type {string}*/
-	export let id;
-	/**@type {string}*/
-	export let text;
-	/**@type {string}*/
-	export let url;
+	export let id: string;
+	export let text: string;
+	export let url: string;
 </script>
 
 <button

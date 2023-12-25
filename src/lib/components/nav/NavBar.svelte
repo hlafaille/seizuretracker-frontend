@@ -1,16 +1,11 @@
-<script>
+<script lang="ts">
 	import { browser } from '$app/environment';
-
-	/**@type {string}*/
-	export let navbarTitle = 'SeizureTracker';
-
-	/**@type {HTMLElement | null}*/
+	import NavBarDrawerUserSection from './NavBarDrawerUserSection.svelte';
+	export let navbarTitle: string = 'SeizureTracker';
 	if (browser) {
-		let navBarDrawer = document.getElementById('navBarDrawer');
+		let navBarDrawer: HTMLElement | null = document.getElementById('navBarDrawer');
 	}
-
-	/**@type {boolean} If the drawer is enabled*/
-	let drawerEnabled = false;
+	let drawerEnabled: boolean = false;
 
 	/**
 	 * Simply toggles `drawerEnabled`
@@ -33,6 +28,7 @@
 	{#if drawerEnabled}
 		<div id="drawer" class="nav-drawer">
 			<div class="nav-drawer-list">
+				<NavBarDrawerUserSection />
 				<slot />
 			</div>
 		</div>

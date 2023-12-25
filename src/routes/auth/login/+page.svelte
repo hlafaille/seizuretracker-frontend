@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import Button from '$lib/components/buttons/Button.svelte';
 	import { sendPostRequest } from '$lib/utils/requestHandler/requestSender';
 	import Card from '$lib/components/cards/Card.svelte';
@@ -11,31 +11,30 @@
 	import LineEdit from '$lib/components/inputs/LineEdit.svelte';
 	import CreateAccountModal from './CreateAccountModal.svelte';
 	import AlertSuccess from '$lib/components/alerts/AlertSuccess.svelte';
-	/** @type {{ email: string | undefined, password: string | undefined }} */
-	let loginRequestPayload = {
+	let loginRequestPayload: { email: string | undefined; password: string | undefined } = {
 		email: undefined,
 		password: undefined
 	};
 
-	/** @type {{firstName: string | undefined, lastName: string | undefined, email: string | undefined, password: string | undefined }} */
-	let createAccountRequestPayload = {
+	let createAccountRequestPayload: {
+		firstName: string | undefined;
+		lastName: string | undefined;
+		email: string | undefined;
+		password: string | undefined;
+	} = {
 		firstName: undefined,
 		lastName: undefined,
 		email: undefined,
 		password: undefined
 	};
 
-	/**@type {string | null}*/
-	let errorMessage = null;
+	let errorMessage: string | null = null;
 
-	/**@type {boolean}*/
-	let isLoading = false;
+	let isLoading: boolean = false;
 
-	/**@type {boolean} - Toggles the CreateAccount modal*/
-	let createAccountModalActive = false;
+	let createAccountModalActive: boolean = false;
 
-	/**@type {boolean} - If a new account was just created*/
-	let newAccountCreated = false;
+	let newAccountCreated: boolean = false;
 
 	/**
 	 * Toggles the CreateAccount modal
@@ -66,7 +65,7 @@
 		/**@type {string | null}*/
 		errorMessage = null;
 		/**@type {Response | null}*/
-		let response = null;
+		let response: Response | null = null;
 		isLoading = true;
 		try {
 			response = await sendPostRequest('http://localhost:8080/v1/auth/session', loginRequestPayload, false);

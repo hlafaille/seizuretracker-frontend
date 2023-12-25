@@ -1,8 +1,6 @@
-<script>
-	/**@type {string} */
-	export let title;
-	/**@type {string}*/
-	export let sizingClass = '';
+<script lang="ts">
+	export let title: string;
+	export let sizingClass: string = '';
 </script>
 
 <div class="card {sizingClass}">

@@ -1,13 +1,11 @@
-<script>
+<script lang="ts">
 	import AlertDanger from '$lib/components/alerts/AlertDanger.svelte';
-	import AlertSuccess from '$lib/components/alerts/AlertSuccess.svelte';
 	import Button from '$lib/components/buttons/Button.svelte';
 	import EmailLineEdit from '$lib/components/inputs/EmailLineEdit.svelte';
 	import LineEdit from '$lib/components/inputs/LineEdit.svelte';
 	import PasswordLineEdit from '$lib/components/inputs/PasswordLineEdit.svelte';
 	import Modal from '$lib/components/modals/Modal.svelte';
 	import { sendPostRequest } from '$lib/utils/requestHandler/requestSender';
-	import { text } from '@sveltejs/kit';
 	import { createEventDispatcher } from 'svelte';
 
 	/**
@@ -16,18 +14,20 @@
 
 	/**
 	 * POST /v1/users request payload
-	 * @typedef {Object} CreateAccountRequest
-	 * @property {string | undefined} firstName - The users first name
-	 * @property {string | undefined} lastName - The users last name
-	 * @property {string | undefined} emailAddress - The users Email Address
-	 * @property {string | undefined} password - The users password
 	 */
+	interface CreateAccountRequest {
+		firstName: string | undefined;
+		lastName: string | undefined;
+		emailAddress: string | undefined;
+		password: string | undefined;
+	}
 
 	/**
 	 * POST /v1/users request response
-	 * @typedef {Object} CreateAccountResponse
-	 * @property {string | undefined} userId - The new users UUID
 	 */
+	interface CreateAccountResponse {
+		userId: string | undefined;
+	}
 
 	/**
 	 * EVENTS
@@ -37,14 +37,10 @@
 	/**
 	 * PROPS
 	 */
-	/**@type {string | null} - Error message from the request or an Error*/
-	export let errorMessage = null;
-	/**@type {boolean} - If the request is currently in processing*/
-	export let inFlight = false;
-	/**@type {Response | null} */
-	let response = null;
-	/**@type {CreateAccountRequest} - Object representing the request payload*/
-	let requestPayload = {
+	export let errorMessage: string | null = null;
+	export let inFlight: boolean = false;
+	let response: Response | null = null;
+	let requestPayload: CreateAccountRequest = {
 		firstName: undefined,
 		lastName: undefined,
 		emailAddress: undefined,
@@ -80,7 +76,7 @@
 		}
 		// emit the account created event
 		/**@type {CreateAccountResponse}*/
-		let responsePayload = await response?.json();
+		let responsePayload: CreateAccountResponse = await response?.json();
 		dispatch('accountCreated', responsePayload);
 	}
 </script>

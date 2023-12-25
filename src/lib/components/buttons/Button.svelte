@@ -1,8 +1,6 @@
-<script>
-	/**@type {string}*/
-	export let id;
-	/**@type {string}*/
-	export let text;
+<script lang="ts">
+	export let id: string;
+	export let text: string;
 </script>
 
 <button id="{id}Button" class="button" on:click>{text}</button>

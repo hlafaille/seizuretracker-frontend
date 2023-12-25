@@ -1,10 +1,7 @@
-<script>
-	/**@type {string}*/
-	export let id;
-	/**@type {string}*/
-	export let placeholder = '';
-	/**@type {string}*/
-	export let text = '';
+<script lang="ts">
+	export let id: string;
+	export let placeholder: string = '';
+	export let text: string = '';
 </script>
 
 <div class="line-edit">

@@ -1,14 +1,8 @@
-<script>
+<script lang="ts">
 	import { onMount } from 'svelte';
-
-	/**@type {string}*/
-	export let title = 'Modal';
-
-	/**@type {boolean}*/
-	export let isActive = true;
-
-	/**Class string for sizing @type {string}*/
-	export let sizingClass = 'w-full md:w-[32rem]';
+	export let title: string = 'Modal';
+	export let isActive: boolean = true;
+	export let sizingClass: string = 'w-full md:w-[32rem]';
 
 	function toggleModal() {
 		if (isActive) {
@@ -22,7 +16,7 @@
 	 * Handle Key Presses
 	 * @param {KeyboardEvent} event
 	 */
-	function handleKeyPress(event) {
+	function handleKeyPress(event: KeyboardEvent) {
 		if (event.key === 'Escape' && isActive) {
 			toggleModal();
 		}

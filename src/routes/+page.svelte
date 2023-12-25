@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import NavBar from '$lib/components/nav/NavBar.svelte';
 	import NavBarDrawerListItem from '$lib/components/nav/NavBarDrawerListItem.svelte';
 </script>

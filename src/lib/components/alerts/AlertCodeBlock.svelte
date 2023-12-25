@@ -1,6 +1,5 @@
-<script>
-	/**@type {string | null}*/
-	export let text = null;
+<script lang="ts">
+	export let text: string | null = null;
 	if (text === null) {
 		text = 'Unspecified';
 	}
