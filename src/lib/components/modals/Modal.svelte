@@ -54,18 +54,13 @@
 
 <style lang="postcss">
 	.modal-bg {
-		@apply absolute bg-neutral-900/50 backdrop-blur-md p-2 w-screen h-screen;
-	}
-
-	.modal-bg {
-		@apply absolute bg-neutral-900/50 backdrop-blur-md p-2 w-screen h-screen;
+		@apply absolute bg-neutral-900/10 backdrop-blur-md p-2 w-screen h-screen;
 	}
 
 	.modal-container {
 		@apply absolute w-screen h-screen left-0 top-0 flex items-center justify-center p-2;
 		z-index: 20;
 	}
-
 
 	.modal {
 		@apply bg-neutral-100 dark:bg-neutral-700;

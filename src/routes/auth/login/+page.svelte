@@ -8,6 +8,7 @@
 	import AlertCodeBlock from '$lib/components/alerts/AlertCodeBlock.svelte';
 	import EmailLineEdit from '$lib/components/inputs/EmailLineEdit.svelte';
 	import PasswordLineEdit from '$lib/components/inputs/PasswordLineEdit.svelte';
+	import LineEdit from '$lib/components/inputs/LineEdit.svelte';
 	/** @type {{ email: string | undefined, password: string | undefined }} */
 	let requestPayload = {
 		email: undefined,
@@ -19,6 +20,16 @@
 
 	/**@type {boolean}*/
 	let isLoading = false;
+
+	/**@type {boolean} - Toggles the CreateAccount modal*/
+	let createAccountModalActive = false;
+
+	/**
+	 * Toggles the CreateAccount modal
+	 */
+	function toggleCreateAccountModal() {
+		createAccountModalActive = !createAccountModalActive;
+	}
 
 	/**
 	 * Clears any queued error message
@@ -71,6 +82,21 @@
 	</Modal>
 {/if}
 
+<!-- Create Account Modal -->
+{#if createAccountModalActive}
+	<Modal title="Create an Account" bind:isActive={createAccountModalActive}>
+		<div class="grid grid-rows-2 gap-2">
+			<div class="grid grid-cols-2 gap-2">
+				<LineEdit id="createAccountFirstName" placeholder="First Name" bind:text={requestPayload.email} />
+				<LineEdit id="createAccountLastName" placeholder="Last Name" bind:text={requestPayload.password} />
+			</div>
+			<EmailLineEdit id="createAccountEmailAddress" placeholder="Email" bind:text={requestPayload.email} />
+			<PasswordLineEdit id="createAccountPassword" placeholder="Last Name" bind:text={requestPayload.password} />
+			<Button id="createAccountSubmit" text="Submit" on:click{doCreateAccount} />
+		</div>
+	</Modal>
+{/if}
+
 <!-- Page Content (login card, etc) -->
 <FlexCenterContainer>
 	<div class="m-4 w-full md:w-96 space-y-2">
@@ -79,7 +105,10 @@
 				<div class="flex flex-col space-y-2">
 					<EmailLineEdit id="emailAddress" placeholder="Email" bind:text={requestPayload.email} />
 					<PasswordLineEdit id="password" placeholder="Password" bind:text={requestPayload.password} />
-					<Button id="logIn" text="Log In" on:click={doLogin} />
+					<div class="grid grid-cols-2 gap-2">
+						<Button id="createAccount" text="Create Account" on:click={toggleCreateAccountModal} />
+						<Button id="logIn" text="Log In" on:click={doLogin} />
+					</div>
 				</div>
 			</Card>
 		</div>
