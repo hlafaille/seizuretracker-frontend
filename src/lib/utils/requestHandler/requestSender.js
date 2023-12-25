@@ -5,7 +5,7 @@ import { getHeaders } from './headers';
  * Send an asynchronous GET request to the given URL with the given data
  * @param {string} url
  * @param {boolean} sendAuthHeader - Send the `Authorization: Bearer abc` header
- * @returns {Promise<Response>}
+ * @returns {Promise<Response>} - Promise containing a `Response`
  */
 export async function sendGetRequest(url, sendAuthHeader = true) {
 	const response = await fetch(url, {
@@ -28,7 +28,7 @@ export async function sendGetRequest(url, sendAuthHeader = true) {
  * @param {string} url
  * @param {object} data
  * @param {boolean} sendAuthHeader - Send the `Authorization: Bearer abc` header
- * @returns {Promise<Response>}
+ * @returns {Promise<Response>} - Promise containing a `Response`
  */
 export async function sendPostRequest(url, data = {}, sendAuthHeader = true) {
 	const response = await fetch(url, {
@@ -52,7 +52,7 @@ export async function sendPostRequest(url, data = {}, sendAuthHeader = true) {
  * @param {string} url
  * @param {object} data
  * @param {boolean} sendAuthHeader - Send the `Authorization: Bearer abc` header
- * @returns {Promise<Response>}
+ * @returns {Promise<Response>} - Promise containing a `Response`
  */
 export async function sendPutRequest(url, data = {}, sendAuthHeader = true) {
 	const response = await fetch(url, {
@@ -75,7 +75,7 @@ export async function sendPutRequest(url, data = {}, sendAuthHeader = true) {
  * Send an asynchronous DELETE request to the given URL with the given data
  * @param {string} url
  * @param {boolean} sendAuthHeader - Send the `Authorization: Bearer abc` header
- * @returns {Promise<Response>}
+ * @returns {Promise<Response>} - Promise containing a `Response`
  */
 export async function sendDeleteRequest(url, sendAuthHeader = true) {
 	const response = await fetch(url, {

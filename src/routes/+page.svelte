@@ -4,7 +4,7 @@
 </script>
 
 <NavBar>
-	<NavBarDrawerListItem id="home" text="Home" url="/home"></NavBarDrawerListItem>
+	<NavBarDrawerListItem id="home" text="Home" url="/"></NavBarDrawerListItem>
 	<NavBarDrawerListItem id="logDashboard" text="Log Dashboard" url="/logDasboard"></NavBarDrawerListItem>
 </NavBar>
 

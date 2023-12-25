@@ -9,8 +9,18 @@
 	import EmailLineEdit from '$lib/components/inputs/EmailLineEdit.svelte';
 	import PasswordLineEdit from '$lib/components/inputs/PasswordLineEdit.svelte';
 	import LineEdit from '$lib/components/inputs/LineEdit.svelte';
+	import CreateAccountModal from './CreateAccountModal.svelte';
+	import AlertSuccess from '$lib/components/alerts/AlertSuccess.svelte';
 	/** @type {{ email: string | undefined, password: string | undefined }} */
-	let requestPayload = {
+	let loginRequestPayload = {
+		email: undefined,
+		password: undefined
+	};
+
+	/** @type {{firstName: string | undefined, lastName: string | undefined, email: string | undefined, password: string | undefined }} */
+	let createAccountRequestPayload = {
+		firstName: undefined,
+		lastName: undefined,
 		email: undefined,
 		password: undefined
 	};
@@ -24,6 +34,9 @@
 	/**@type {boolean} - Toggles the CreateAccount modal*/
 	let createAccountModalActive = false;
 
+	/**@type {boolean} - If a new account was just created*/
+	let newAccountCreated = false;
+
 	/**
 	 * Toggles the CreateAccount modal
 	 */
@@ -31,6 +44,14 @@
 		createAccountModalActive = !createAccountModalActive;
 	}
 
+	/**
+	 * Called from the `accountCreated` event on the `CreateAccountModal` component. This function will toggle the modal closed,
+	 * along with showing an alert
+	 */
+	function handleOnAccountCreated() {
+		toggleCreateAccountModal();
+		newAccountCreated = true;
+	}
 	/**
 	 * Clears any queued error message
 	 */
@@ -48,7 +69,7 @@
 		let response = null;
 		isLoading = true;
 		try {
-			response = await sendPostRequest('http://localhost:8080/v1/auth/session', requestPayload, false);
+			response = await sendPostRequest('http://localhost:8080/v1/auth/session', loginRequestPayload, false);
 		} catch (e) {
 			errorMessage = e.message;
 		} finally {
@@ -57,7 +78,6 @@
 		if (response?.status === 201) {
 			isLoading = false;
 			let responsePayload = await response.json();
-			console.log(responsePayload);
 			const expirationDate = new Date();
 			expirationDate.setHours(expirationDate.getHours() + 3);
 			document.cookie =
@@ -66,7 +86,7 @@
 				'; expires=' +
 				expirationDate.toUTCString() +
 				'; path=/; domain=localhost; secure';
-			goto('/home');
+			goto('/');
 			return;
 		}
 	}
@@ -84,17 +104,7 @@
 
 <!-- Create Account Modal -->
 {#if createAccountModalActive}
-	<Modal title="Create an Account" bind:isActive={createAccountModalActive}>
-		<div class="grid grid-rows-2 gap-2">
-			<div class="grid grid-cols-2 gap-2">
-				<LineEdit id="createAccountFirstName" placeholder="First Name" bind:text={requestPayload.email} />
-				<LineEdit id="createAccountLastName" placeholder="Last Name" bind:text={requestPayload.password} />
-			</div>
-			<EmailLineEdit id="createAccountEmailAddress" placeholder="Email" bind:text={requestPayload.email} />
-			<PasswordLineEdit id="createAccountPassword" placeholder="Last Name" bind:text={requestPayload.password} />
-			<Button id="createAccountSubmit" text="Submit" on:click{doCreateAccount} />
-		</div>
-	</Modal>
+	<CreateAccountModal on:accountCreated={handleOnAccountCreated} />
 {/if}
 
 <!-- Page Content (login card, etc) -->
@@ -102,9 +112,13 @@
 	<div class="m-4 w-full md:w-96 space-y-2">
 		<div class={isLoading ? 'animate-pulse' : ''}>
 			<Card title="Welcome">
+				<!-- Account Created Alert -->
 				<div class="flex flex-col space-y-2">
-					<EmailLineEdit id="emailAddress" placeholder="Email" bind:text={requestPayload.email} />
-					<PasswordLineEdit id="password" placeholder="Password" bind:text={requestPayload.password} />
+					{#if newAccountCreated}
+						<AlertSuccess text="Account Created" />
+					{/if}
+					<EmailLineEdit id="emailAddress" placeholder="Email" bind:text={loginRequestPayload.email} />
+					<PasswordLineEdit id="password" placeholder="Password" bind:text={loginRequestPayload.password} />
 					<div class="grid grid-cols-2 gap-2">
 						<Button id="createAccount" text="Create Account" on:click={toggleCreateAccountModal} />
 						<Button id="logIn" text="Log In" on:click={doLogin} />

@@ -81,9 +81,7 @@
 	}
 
 	.modal-close-button {
-		@apply text-neutral-600 hover:text-neutral-500 text-xl font-black h-min w-min;
+		@apply text-neutral-300 hover:text-neutral-200 dark:text-neutral-600 dark:hover:text-neutral-500 text-xl font-black h-min w-min;
 		@apply transition-all;
-		/* @apply hidden sm:block; */
-		/* @apply hidden sm:block; */
 	}
 </style>
