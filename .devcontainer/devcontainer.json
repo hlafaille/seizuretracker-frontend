@@ -2,15 +2,14 @@
 // README at: https://github.com/devcontainers/templates/tree/main/src/alpine
 {
 	"name": "SeizureTracker Frontend",
-	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-	"image": "mcr.microsoft.com/devcontainers/base:bullseye",
+	"dockerFile": "dockerfile",
 	"features": {
 		"ghcr.io/shyim/devcontainers-features/bun:0": {},
 	},
 	"mounts": [
-		"source=${localEnv:HOME}${localEnv:USERPROFILE},target=/host-home-folder,type=bind,consistency=cached"
+		"source=${localWorkspaceFolderBasename}-node_modules,target=${containerWorkspaceFolder}/node_modules,type=volume"
 	],
-	"postCreateCommand": "curl -fsSL https://bun.sh/install | bash",
+	"postCreateCommand": "sudo chown -R vscode node_modules",
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
