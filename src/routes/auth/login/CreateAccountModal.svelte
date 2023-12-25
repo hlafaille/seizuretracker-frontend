@@ -72,7 +72,9 @@
 		try {
 			response = await sendPostRequest('http://localhost:8080/v1/users', requestPayload, false);
 		} catch (e) {
-			errorMessage = e.message;
+			if (e instanceof Error) {
+				errorMessage = e.message;
+			}
 		} finally {
 			inFlight = false;
 		}

@@ -71,7 +71,9 @@
 		try {
 			response = await sendPostRequest('http://localhost:8080/v1/auth/session', loginRequestPayload, false);
 		} catch (e) {
-			errorMessage = e.message;
+			if (e instanceof Error) {
+				errorMessage = e.message;
+			}
 		} finally {
 			isLoading = false;
 		}
