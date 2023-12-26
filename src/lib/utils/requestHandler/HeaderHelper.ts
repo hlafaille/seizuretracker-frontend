@@ -1,10 +1,10 @@
-import { SessionCookieMissingError } from './errors';
-/**
- * Standardized request headers
- * @typedef {Object} RequestHeaders
- * @property {string} `Content-Type` - The `Content-Type`.
- * @property {string} [Authorization] - The `Authorization: Bearer abc`.
- */
+import { SessionCookieMissingError } from './SessionCookieMissingError';
+import type { Request } from '$lib/utils/requestHandler/Request';
+
+interface RequestHeaders {
+	'Content-Type': string | undefined,
+	'Authorization': string | undefined,
+}
 
 /**
  * Get the current `session` cookie as an `Authorization: Bearer` string.
@@ -35,17 +35,16 @@ export function getSessionCookieAsBearer() {
  * @returns {RequestHeaders}
  */
 export function getHeaders(authHeader = true) {
-	/**@type {RequestHeaders} */
-	let requestHeaders = {
-		'Content-Type': 'application/json'
-	};
+	let requestHeaders: RequestHeaders = {
+		'Content-Type': 'application/json',
+		'Authorization': undefined
+	}
+
 	if (authHeader) {
-		/**@type {string | null} */
 		let authorizationHeader = getSessionCookieAsBearer();
 
 		if (authorizationHeader) {
-			/**@type {string} */
-			requestHeaders['Authorization'] = authorizationHeader;
+			requestHeaders.Authorization = authorizationHeader;
 		}
 	}
 	return requestHeaders;
