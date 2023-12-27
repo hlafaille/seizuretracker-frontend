@@ -10,11 +10,8 @@
 	import CreateAccountModal from './CreateAccountModal.svelte';
 	import AlertSuccess from '$lib/components/tk/alerts/AlertSuccess.svelte';
 	import { REQUEST_FACTORY } from '$lib/utils/GlobalConstant';
-	import type { RequestStatePropContext } from '$lib/utils/requesthandler/RequestStatePropContext';
 	import { addCookie } from '$lib/utils/CookieHandler';
-	import { onMount } from 'svelte';
-	import { writable } from 'svelte/store';
-	import { boolean } from 'joi';
+	import { type Writable, writable } from 'svelte/store';
 
 	export let loginRequestPayload: { email: string | undefined; password: string | undefined } = {
 		email: undefined,
@@ -34,12 +31,10 @@
 		password: undefined
 	};
 
-	const errorMessage = writable(undefined);
-	export let requestStatePropContext: RequestStatePropContext = {
-		'errorMessageProp': { value: undefined },
-		'inFlightProp': { value: false }
-	};
-	export let inFlight: boolean | undefined = requestStatePropContext.inFlightProp.value;
+	const errorMessage: Writable<string | undefined> = writable(undefined);
+  const inFlight: Writable<boolean> = writable(false);
+
+	//export let inFlight: boolean | undefined = requestStatePropContext.inFlightProp.value;
 
 	let isCreateAccountModalActive: boolean = false;
 
@@ -65,7 +60,7 @@
 	 * Send the request to log in
 	 */
 	async function doLogin() {
-		let request = REQUEST_FACTORY.buildPostRequest('/auth/session', false, loginRequestPayload, requestStatePropContext);
+		let request = REQUEST_FACTORY.buildPostRequest('/auth/session', false, loginRequestPayload, errorMessage, inFlight);
 		try {
 			let response = await request.doRequest();
 			if (response.status === 201) {
@@ -77,17 +72,16 @@
 			}
 		} catch (ignored) {
 		} finally {
-			console.log('@Exception type of errorMessage ' + typeof requestStatePropContext.errorMessageProp.value);
 		}
 	}
 </script>
 
 <!-- Error Modal -->
-{#if errorMessage}
+{#if $errorMessage}
     <Modal title="Uh-oh!">
         <div class="flex flex-col space-y-2">
             <p>Looks like there was an error...</p>
-            <AlertCodeBlock text={errorMessage} />
+            <AlertCodeBlock text={$errorMessage} />
         </div>
     </Modal>
 {/if}
@@ -98,11 +92,8 @@
 <!-- Page Content (login card, etc) -->
 <FlexCenterContainer>
     <div class="m-4 w-full space-y-2 md:w-96">
-        <div class={requestStatePropContext.inFlightProp.value ? 'animate-pulse' : ''}>
+        <div class={$inFlight ? 'animate-pulse' : ''}>
             <Card title="Welcome">
-                {#if requestStatePropContext.errorMessageProp.value}
-                    <p>CUM</p>
-                {/if}
                 <!-- Account Created Alert -->
                 <div class="flex flex-col space-y-2">
                     {#if newAccountCreated}

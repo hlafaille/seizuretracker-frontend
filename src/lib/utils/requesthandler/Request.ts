@@ -2,22 +2,26 @@ import type { HttpMethod } from '$lib/utils/requesthandler/HttpMethod';
 import { getHeaders } from '$lib/utils/requesthandler/HeaderHelper';
 import type { RequestStatePropContext } from '$lib/utils/requesthandler/RequestStatePropContext';
 import { RequestError } from '$lib/utils/requesthandler/RequestError';
+import type { Writable } from 'svelte/store';
+import { error } from '@sveltejs/kit';
 
 export class Request {
 	private readonly fullUrl: string;
 	private readonly httpMethod: HttpMethod;
 	private readonly includeAuthorizationHeader: boolean;
 	private readonly requestPayload: object | null;
-	private readonly requestStatePropContext: RequestStatePropContext;
+	private readonly errorMessageStore: Writable<string | undefined>;
+	private readonly inFlightStore: Writable<boolean>;
 
 	constructor(
 		fullUrl: string, httpMethod: HttpMethod, includeAuthorizationHeader: boolean, requestPayload: object | null,
-		requestStatePropContext: RequestStatePropContext) {
+		errorMessageStore: Writable<string | undefined>, inFlightStore: Writable<boolean>) {
 		this.fullUrl = fullUrl;
 		this.httpMethod = httpMethod;
 		this.includeAuthorizationHeader = includeAuthorizationHeader;
 		this.requestPayload = requestPayload;
-		this.requestStatePropContext = requestStatePropContext;
+		this.errorMessageStore = errorMessageStore;
+		this.inFlightStore = inFlightStore;
 	}
 
 	/**
@@ -26,8 +30,8 @@ export class Request {
 	 */
 	public async doRequest(): Promise<Response> {
 		// set the base state
-		this.requestStatePropContext.errorMessageProp.value = undefined;
-		this.requestStatePropContext.inFlightProp.value = true;
+		this.errorMessageStore.set(undefined);
+		this.inFlightStore.set(true);
 
 		try {
 			// make the request
@@ -50,14 +54,14 @@ export class Request {
 			return response;
 		} catch (e) {
 			if (e instanceof RequestError) {
-				this.requestStatePropContext.errorMessageProp.value = e.message;
+				this.errorMessageStore.set(e.message);
 			} else if (e instanceof Error) {
-				this.requestStatePropContext.errorMessageProp.value = 'An internal error has occurred.';
+				this.errorMessageStore.set('An internal error has occurred.');
 			}
 			throw e;
 		} finally {
 			// set the component in flight prop to false
-			this.requestStatePropContext.inFlightProp.value = false;
+			this.inFlightStore.set(false);
 		}
 	}
 }
