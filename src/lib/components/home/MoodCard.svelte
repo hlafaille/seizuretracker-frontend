@@ -1,6 +1,9 @@
 <script lang="ts">
 	import Card from '$lib/components/tk/cards/Card.svelte';
 	import Button from '$lib/components/tk/buttons/Button.svelte';
+	import { REQUEST_FACTORY } from '$lib/utils/GlobalConstant';
+	import { HttpMethod } from '$lib/utils/requestHandler/HttpMethod';
+	import { Request } from '$lib/utils/requestHandler/Request.js';
 
 	/**
 	 * todo add an onMount & GET call to check if it's been X amount of time since last survey entry
@@ -10,7 +13,7 @@
 	 * PROPS
 	 */
 	export let errorMessage: string | null = null;
-	export let isLoading: boolean = false;
+	export let inFlight: boolean = false;
 
 	/**
 	 * ENUMS
@@ -27,17 +30,25 @@
 	 * @param mood
 	 */
 	async function doMoodSurveyEntrySubmission(mood: MoodSurveyAllowedMoods) {
+		let request: Request = REQUEST_FACTORY.build('/moodSurvey', HttpMethod.POST, true);
+		try {
+			let response: Response = await request.doRequest();
+		} catch (e) {
+			if (e instanceof Error) {
+				errorMessage = e.message;
+			}
+		}
 	}
 
 </script>
 
 <Card title="How are you feeling?" subtitle="We'll generate a graph soon.">
-	<div class="grid grid-cols-4 gap-2">
-		<Button id="moodSurveyBadButton" text="Bad" />
-		<Button id="moodSurveyConfusedButton" text="Confused" />
-		<Button id="moodSurveyMehButton" text="Meh" />
-		<Button id="moodSurveyGoodButton" text="Good" />
-	</div>
+    <div class="grid grid-cols-4 gap-2">
+        <Button id="moodSurveyBadButton" text="Bad" />
+        <Button id="moodSurveyConfusedButton" text="Confused" />
+        <Button id="moodSurveyMehButton" text="Meh" />
+        <Button id="moodSurveyGoodButton" text="Good" />
+    </div>
 </Card>
 
 

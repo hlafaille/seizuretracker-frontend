@@ -6,23 +6,22 @@ import type { HttpMethod } from '$lib/utils/requestHandler/HttpMethod';
  */
 export class RequestFactory {
 	private readonly baseUrl: string;
-	private readonly includeAuthorizationHeader;
 
-	constructor(baseUrl: string, includeAuthorizationHeader: boolean) {
+	constructor(baseUrl: string) {
 		this.baseUrl = baseUrl;
-		this.includeAuthorizationHeader = includeAuthorizationHeader;
 	}
 
 	/**
 	 * Build a Request object
 	 * @param endpoint
 	 * @param httpMethod
+	 * @param includeAuthorizationHeader
 	 */
-	public buildRestRequest(endpoint: string, httpMethod: HttpMethod): Request {
+	public build(endpoint: string, httpMethod: HttpMethod, includeAuthorizationHeader: boolean): Request {
 		return new Request(
 			this.baseUrl + endpoint,
 			httpMethod,
-			this.includeAuthorizationHeader
+			includeAuthorizationHeader
 		);
 	}
 }

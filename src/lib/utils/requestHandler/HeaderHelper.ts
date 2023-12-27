@@ -1,10 +1,4 @@
 import { SessionCookieMissingError } from './SessionCookieMissingError';
-import type { Request } from '$lib/utils/requestHandler/Request';
-
-interface RequestHeaders {
-	'Content-Type': string | undefined,
-	'Authorization': string | undefined,
-}
 
 /**
  * Get the current `session` cookie as an `Authorization: Bearer` string.
@@ -35,9 +29,8 @@ export function getSessionCookieAsBearer() {
  * @returns {RequestHeaders}
  */
 export function getHeaders(authHeader = true) {
-	let requestHeaders: RequestHeaders = {
+	let requestHeaders: HeadersInit = {
 		'Content-Type': 'application/json',
-		'Authorization': undefined
 	}
 
 	if (authHeader) {
