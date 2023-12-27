@@ -25,11 +25,12 @@ export class Request {
 	 * @throws RequestError
 	 */
 	public async doRequest(): Promise<Response> {
-		// set the component inFlight prop to true
-		this.requestStatePropContext.inFlightProp = true;
+		// set the base state
+		this.requestStatePropContext.errorMessageProp.value = undefined;
+		this.requestStatePropContext.inFlightProp.value = true;
 
-		// make the request
 		try {
+			// make the request
 			let response = await fetch(this.fullUrl, {
 				method: this.httpMethod,
 				headers: getHeaders(this.includeAuthorizationHeader),
@@ -49,14 +50,14 @@ export class Request {
 			return response;
 		} catch (e) {
 			if (e instanceof RequestError) {
-				this.requestStatePropContext.errorMessageProp = e.message;
+				this.requestStatePropContext.errorMessageProp.value = e.message;
 			} else if (e instanceof Error) {
-				this.requestStatePropContext.errorMessageProp = 'An internal error has occurred.';
+				this.requestStatePropContext.errorMessageProp.value = 'An internal error has occurred.';
 			}
 			throw e;
 		} finally {
-			// set the component in flight prop to true
-			this.requestStatePropContext.inFlightProp = false;
+			// set the component in flight prop to false
+			this.requestStatePropContext.inFlightProp.value = false;
 		}
 	}
 }

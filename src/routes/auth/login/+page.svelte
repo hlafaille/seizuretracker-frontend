@@ -12,10 +12,15 @@
 	import { REQUEST_FACTORY } from '$lib/utils/GlobalConstant';
 	import type { RequestStatePropContext } from '$lib/utils/requesthandler/RequestStatePropContext';
 	import { addCookie } from '$lib/utils/CookieHandler';
-	let loginRequestPayload: { email: string | undefined; password: string | undefined } = {
+	import { onMount } from 'svelte';
+	import { writable } from 'svelte/store';
+	import { boolean } from 'joi';
+
+	export let loginRequestPayload: { email: string | undefined; password: string | undefined } = {
 		email: undefined,
 		password: undefined
 	};
+
 
 	let createAccountRequestPayload: {
 		firstName: string | undefined;
@@ -29,9 +34,12 @@
 		password: undefined
 	};
 
-	let errorMessage: string | null = null;
-
-	let inFlight: boolean = false;
+	const errorMessage = writable(undefined);
+	export let requestStatePropContext: RequestStatePropContext = {
+		'errorMessageProp': { value: undefined },
+		'inFlightProp': { value: false }
+	};
+	export let inFlight: boolean | undefined = requestStatePropContext.inFlightProp.value;
 
 	let isCreateAccountModalActive: boolean = false;
 
@@ -57,30 +65,31 @@
 	 * Send the request to log in
 	 */
 	async function doLogin() {
-		let requestStatePropContext: RequestStatePropContext = {
-			'errorMessageProp': errorMessage,
-			'inFlightProp': inFlight,
-		}
-		let request = REQUEST_FACTORY.buildPostRequest("/auth/session", false, loginRequestPayload, requestStatePropContext)
-		let response = await request.doRequest()
-		if (response.status === 201) {
-			let responsePayload = await response.json();
-			const expirationDate = new Date();
-			expirationDate.setHours(expirationDate.getHours() + 3);
-			addCookie("session", (await response.json()).accessToken, expirationDate);
-			await goto('/');
+		let request = REQUEST_FACTORY.buildPostRequest('/auth/session', false, loginRequestPayload, requestStatePropContext);
+		try {
+			let response = await request.doRequest();
+			if (response.status === 201) {
+				let responsePayload = await response.json();
+				const expirationDate = new Date();
+				expirationDate.setHours(expirationDate.getHours() + 3);
+				addCookie('session', responsePayload.accessToken, expirationDate);
+				await goto('/');
+			}
+		} catch (ignored) {
+		} finally {
+			console.log('@Exception type of errorMessage ' + typeof requestStatePropContext.errorMessageProp.value);
 		}
 	}
 </script>
 
 <!-- Error Modal -->
 {#if errorMessage}
-	<Modal title="Uh-oh!">
-		<div class="flex flex-col space-y-2">
-			<p>Looks like there was an error...</p>
-			<AlertCodeBlock text={errorMessage} />
-		</div>
-	</Modal>
+    <Modal title="Uh-oh!">
+        <div class="flex flex-col space-y-2">
+            <p>Looks like there was an error...</p>
+            <AlertCodeBlock text={errorMessage} />
+        </div>
+    </Modal>
 {/if}
 
 <!-- Create Account Modal -->
@@ -88,24 +97,27 @@
 
 <!-- Page Content (login card, etc) -->
 <FlexCenterContainer>
-	<div class="m-4 w-full space-y-2 md:w-96">
-		<div class={isLoading ? 'animate-pulse' : ''}>
-			<Card title="Welcome">
-				<!-- Account Created Alert -->
-				<div class="flex flex-col space-y-2">
-					{#if newAccountCreated}
-						<AlertSuccess text="Account Created" />
-					{/if}
-					<EmailLineEdit id="emailAddress" placeholder="Email" bind:text={loginRequestPayload.email} />
-					<PasswordLineEdit id="password" placeholder="Password" bind:text={loginRequestPayload.password} />
-					<div class="grid grid-cols-2 gap-2">
-						<Button id="createAccount" text="Create Account" on:click={toggleCreateAccountModal} />
-						<Button id="logIn" text="Log In" on:click={doLogin} />
-					</div>
-				</div>
-			</Card>
-		</div>
-	</div>
+    <div class="m-4 w-full space-y-2 md:w-96">
+        <div class={requestStatePropContext.inFlightProp.value ? 'animate-pulse' : ''}>
+            <Card title="Welcome">
+                {#if requestStatePropContext.errorMessageProp.value}
+                    <p>CUM</p>
+                {/if}
+                <!-- Account Created Alert -->
+                <div class="flex flex-col space-y-2">
+                    {#if newAccountCreated}
+                        <AlertSuccess text="Account Created" />
+                    {/if}
+                    <EmailLineEdit id="emailAddress" placeholder="Email" bind:text={loginRequestPayload.email} />
+                    <PasswordLineEdit id="password" placeholder="Password" bind:text={loginRequestPayload.password} />
+                    <div class="grid grid-cols-2 gap-2">
+                        <Button id="createAccount" text="Create Account" on:click={toggleCreateAccountModal} />
+                        <Button id="logIn" text="Log In" on:click={doLogin} />
+                    </div>
+                </div>
+            </Card>
+        </div>
+    </div>
 </FlexCenterContainer>
 
 <style lang="postcss">
