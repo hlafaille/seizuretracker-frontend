@@ -1,6 +1,5 @@
 import { Request } from '$lib/utils/requesthandler/Request';
 import { HttpMethod } from '$lib/utils/requesthandler/HttpMethod';
-import type { RequestStatePropContext } from '$lib/utils/requesthandler/RequestStatePropContext';
 import type { Writable } from 'svelte/store';
 
 /**
@@ -22,10 +21,10 @@ export class RequestFactory {
 	 * @param errorMessageStore
 	 * @param inFlightStore
 	 */
-	private build(
+	private build<T>(
 		endpoint: string, httpMethod: HttpMethod, includeAuthorizationHeader: boolean, requestPayload: object | null,
 		errorMessageStore: Writable<string | undefined>, inFlightStore: Writable<boolean>
-	): Request {
+	): Request<T> {
 		return new Request(
 			this.baseUrl + endpoint,
 			httpMethod,
@@ -42,11 +41,14 @@ export class RequestFactory {
 	 * @param includeAuthorizationHeader
 	 * @param requestPayload
 	 * @param errorMessageStore
+	 * @param inFlightStore
 	 */
-	public buildPostRequest(
+	public buildPostRequest<T>(
 		endpoint: string, includeAuthorizationHeader: boolean, requestPayload: object | null,
 		errorMessageStore: Writable<string | undefined>, inFlightStore: Writable<boolean>
-	): Request {
-		return this.build(endpoint, HttpMethod.POST, includeAuthorizationHeader, requestPayload, errorMessageStore, inFlightStore);
+	): Request<T> {
+		return this.build(
+			endpoint, HttpMethod.POST, includeAuthorizationHeader, requestPayload, errorMessageStore, inFlightStore
+		);
 	}
 }

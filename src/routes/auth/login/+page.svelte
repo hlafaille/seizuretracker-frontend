@@ -10,34 +10,30 @@
 	import CreateAccountModal from './CreateAccountModal.svelte';
 	import AlertSuccess from '$lib/components/tk/alerts/AlertSuccess.svelte';
 	import { REQUEST_FACTORY } from '$lib/utils/GlobalConstant';
-	import { addCookie } from '$lib/utils/CookieHandler';
+	import { addCookie, getCookie } from '$lib/utils/CookieHandler';
 	import { type Writable, writable } from 'svelte/store';
+	import type { CreateAccountRequest } from '$lib/dto/user/CreateAccountRequest';
+	import type { CreateSessionRequest } from '$lib/dto/auth/CreateSessionRequest';
+	import type { CreateAccountResponse } from '$lib/dto/user/CreateAccountResponse';
+	import type { CreateSessionResponse } from '$lib/dto/auth/CreateSessionResponse';
 
-	export let loginRequestPayload: { email: string | undefined; password: string | undefined } = {
+	export let loginRequestPayload: CreateSessionRequest = {
 		email: undefined,
 		password: undefined
 	};
 
 
-	let createAccountRequestPayload: {
-		firstName: string | undefined;
-		lastName: string | undefined;
-		email: string | undefined;
-		password: string | undefined;
-	} = {
+	let createAccountRequestPayload: CreateAccountRequest = {
 		firstName: undefined,
 		lastName: undefined,
-		email: undefined,
+		emailAddress: undefined,
 		password: undefined
 	};
 
 	const errorMessage: Writable<string | undefined> = writable(undefined);
 	const inFlight: Writable<boolean> = writable(false);
 
-	//export let inFlight: boolean | undefined = requestStatePropContext.inFlightProp.value;
-
 	let isCreateAccountModalActive: boolean = false;
-
 	let newAccountCreated: boolean = false;
 
 	/**
@@ -51,7 +47,7 @@
 	 * Called from the `accountCreated` event on the `CreateAccountModal` component. This function will toggle the modal closed,
 	 * along with showing an alert
 	 */
-	function handleOnAccountCreated() {
+	function handleOnAccountCreated(event: CustomEvent) {
 		toggleCreateAccountModal();
 		newAccountCreated = true;
 	}
@@ -60,15 +56,13 @@
 	 * Send the request to log in
 	 */
 	async function doLogin() {
-		let request = REQUEST_FACTORY.buildPostRequest('/auth/session', false, loginRequestPayload, errorMessage, inFlight);
-		let response = await request.doRequest();
-		if (response.status === 201) {
-			let responsePayload = await response.json();
-			const expirationDate = new Date();
-			expirationDate.setHours(expirationDate.getHours() + 3);
-			addCookie('session', responsePayload.accessToken, expirationDate);
-			await goto('/');
-		}
+		let request = REQUEST_FACTORY.buildPostRequest<CreateSessionResponse>('/auth/session', false, loginRequestPayload, errorMessage, inFlight);
+		let responsePayload = await request.doRequest();
+		const expirationDate = new Date();
+		expirationDate.setHours(expirationDate.getHours() + 3);
+		addCookie('session', responsePayload.accessToken, expirationDate);
+		console.log(getCookie('session'))
+		await goto('/');
 	}
 </script>
 

@@ -1,11 +1,10 @@
 import type { HttpMethod } from '$lib/utils/requesthandler/HttpMethod';
 import { getHeaders } from '$lib/utils/requesthandler/HeaderHelper';
-import type { RequestStatePropContext } from '$lib/utils/requesthandler/RequestStatePropContext';
 import { RequestError } from '$lib/utils/requesthandler/RequestError';
 import type { Writable } from 'svelte/store';
-import { error } from '@sveltejs/kit';
 
-export class Request {
+
+export class Request<T> {
 	private readonly fullUrl: string;
 	private readonly httpMethod: HttpMethod;
 	private readonly includeAuthorizationHeader: boolean;
@@ -28,7 +27,7 @@ export class Request {
 	 * Send the request
 	 * @throws RequestError
 	 */
-	public async doRequest(): Promise<Response> {
+	public async doRequest(): Promise<T> {
 		// set the base state
 		this.errorMessageStore.set(undefined);
 		this.inFlightStore.set(true);
@@ -51,7 +50,7 @@ export class Request {
 			if (!response.ok) {
 				throw new RequestError(jsonResponse.message);
 			}
-			return response;
+			return <T>jsonResponse;
 		} catch (e) {
 			if (e instanceof RequestError) {
 				this.errorMessageStore.set(e.message);
