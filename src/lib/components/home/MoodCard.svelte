@@ -2,9 +2,9 @@
 	import Card from '$lib/components/tk/cards/Card.svelte';
 	import Button from '$lib/components/tk/buttons/Button.svelte';
 	import { REQUEST_FACTORY } from '$lib/utils/GlobalConstant';
-	import { HttpMethod } from '$lib/utils/requestHandler/HttpMethod';
-	import { Request } from '$lib/utils/requestHandler/Request.js';
-	import type { RequestStatePropContext } from '$lib/utils/requestHandler/RequestStatePropContext';
+	import { HttpMethod } from '$lib/utils/requesthandler/HttpMethod';
+	import { Request } from '$lib/utils/requesthandler/Request.js';
+	import type { RequestStatePropContext } from '$lib/utils/requesthandler/RequestStatePropContext';
 
 	/**
 	 * todo add an onMount & GET call to check if it's been X amount of time since last survey entry

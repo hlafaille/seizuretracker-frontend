@@ -1,29 +1,32 @@
-import type { HttpMethod } from '$lib/utils/requestHandler/HttpMethod';
-import {getHeaders} from '$lib/utils/requestHandler/HeaderHelper';
-import type { RequestStatePropContext } from '$lib/utils/requestHandler/RequestStatePropContext';
-import { RequestError } from '$lib/utils/requestHandler/RequestError';
+import type { HttpMethod } from '$lib/utils/requesthandler/HttpMethod';
+import { getHeaders } from '$lib/utils/requesthandler/HeaderHelper';
+import type { RequestStatePropContext } from '$lib/utils/requesthandler/RequestStatePropContext';
+import { RequestError } from '$lib/utils/requesthandler/RequestError';
 
 export class Request {
 	private readonly fullUrl: string;
 	private readonly httpMethod: HttpMethod;
 	private readonly includeAuthorizationHeader: boolean;
 	private readonly requestPayload: object | null;
+	private readonly requestStatePropContext: RequestStatePropContext;
 
-	constructor(fullUrl: string, httpMethod: HttpMethod, includeAuthorizationHeader: boolean, requestPayload: object | null) {
+	constructor(
+		fullUrl: string, httpMethod: HttpMethod, includeAuthorizationHeader: boolean, requestPayload: object | null,
+		requestStatePropContext: RequestStatePropContext) {
 		this.fullUrl = fullUrl;
 		this.httpMethod = httpMethod;
 		this.includeAuthorizationHeader = includeAuthorizationHeader;
 		this.requestPayload = requestPayload;
+		this.requestStatePropContext = requestStatePropContext;
 	}
 
 	/**
 	 * Send the request
-	 * @param context
 	 * @throws RequestError
 	 */
-	public async doRequest(context: RequestStatePropContext): Promise<Response> {
+	public async doRequest(): Promise<Response> {
 		// set the component inFlight prop to true
-		context.inFlightProp = true;
+		this.requestStatePropContext.inFlightProp = true;
 
 		// make the request
 		try {
@@ -39,21 +42,21 @@ export class Request {
 			}
 
 			// handle response
-			let jsonResponse = await response.json() // <-- this might cause an issue if .json() is only callable once
+			let jsonResponse = await response.json(); // <-- this might cause an issue if .json() is only callable once
 			if (!response.ok) {
 				throw new RequestError(jsonResponse.message);
 			}
 			return response;
 		} catch (e) {
 			if (e instanceof RequestError) {
-				context.errorMessageProp = e.message;
+				this.requestStatePropContext.errorMessageProp = e.message;
 			} else if (e instanceof Error) {
-				context.errorMessageProp = "An internal error has occurred.";
+				this.requestStatePropContext.errorMessageProp = 'An internal error has occurred.';
 			}
 			throw e;
 		} finally {
 			// set the component in flight prop to true
-			context.inFlightProp = false;
+			this.requestStatePropContext.inFlightProp = false;
 		}
 	}
 }

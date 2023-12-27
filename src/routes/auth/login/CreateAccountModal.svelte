@@ -7,8 +7,8 @@
 	import Modal from '$lib/components/tk/modals/Modal.svelte';
 	import { createEventDispatcher } from 'svelte';
 	import { REQUEST_FACTORY } from '$lib/utils/GlobalConstant';
-	import { HttpMethod } from '$lib/utils/requestHandler/HttpMethod';
-	import type { RequestStatePropContext } from '$lib/utils/requestHandler/RequestStatePropContext';
+	import { HttpMethod } from '$lib/utils/requesthandler/HttpMethod';
+	import type { RequestStatePropContext } from '$lib/utils/requesthandler/RequestStatePropContext';
 
 	/**
 	 * TYPES
@@ -63,12 +63,12 @@
 		// set the base state for the request
 		clearErrorMessage();
 
-		let request = REQUEST_FACTORY.buildPostRequest("/auth/session", false, null)
 		let propContext: RequestStatePropContext = {
 			'errorMessageProp': errorMessage,
 			'inFlightProp': inFlight
 		}
-		let responsePayload: object = (await request.doRequest(propContext)).json()
+		let request = REQUEST_FACTORY.buildPostRequest("/auth/session", false, null, propContext)
+		let responsePayload: object = (await request.doRequest()).json()
 		dispatch('accountCreated', responsePayload);
 	}
 </script>

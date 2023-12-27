@@ -9,6 +9,9 @@
 	import PasswordLineEdit from '$lib/components/tk/inputs/PasswordLineEdit.svelte';
 	import CreateAccountModal from './CreateAccountModal.svelte';
 	import AlertSuccess from '$lib/components/tk/alerts/AlertSuccess.svelte';
+	import { REQUEST_FACTORY } from '$lib/utils/GlobalConstant';
+	import type { RequestStatePropContext } from '$lib/utils/requesthandler/RequestStatePropContext';
+	import { addCookie } from '$lib/utils/CookieHandler';
 	let loginRequestPayload: { email: string | undefined; password: string | undefined } = {
 		email: undefined,
 		password: undefined
@@ -28,7 +31,7 @@
 
 	let errorMessage: string | null = null;
 
-	let isLoading: boolean = false;
+	let inFlight: boolean = false;
 
 	let isCreateAccountModalActive: boolean = false;
 
@@ -54,33 +57,18 @@
 	 * Send the request to log in
 	 */
 	async function doLogin() {
-		/**@type {string | null}*/
-		errorMessage = null;
-		/**@type {Response | null}*/
-		let response: Response | null = null;
-		isLoading = true;
-		try {
-			response = await sendPostRequest('http://localhost:8080/v1/auth/session', loginRequestPayload, false);
-		} catch (e) {
-			if (e instanceof Error) {
-				errorMessage = e.message;
-			}
-		} finally {
-			isLoading = false;
+		let requestStatePropContext: RequestStatePropContext = {
+			'errorMessageProp': errorMessage,
+			'inFlightProp': inFlight,
 		}
-		if (response?.status === 201) {
-			isLoading = false;
+		let request = REQUEST_FACTORY.buildPostRequest("/auth/session", false, loginRequestPayload, requestStatePropContext)
+		let response = await request.doRequest()
+		if (response.status === 201) {
 			let responsePayload = await response.json();
 			const expirationDate = new Date();
 			expirationDate.setHours(expirationDate.getHours() + 3);
-			document.cookie =
-				'session=' +
-				responsePayload.accessToken +
-				'; expires=' +
-				expirationDate.toUTCString() +
-				'; path=/; domain=localhost; secure';
-			goto('/');
-			return;
+			addCookie("session", (await response.json()).accessToken, expirationDate);
+			await goto('/');
 		}
 	}
 </script>
