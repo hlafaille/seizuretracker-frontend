@@ -36,7 +36,23 @@ export class RequestFactory {
 	}
 
 	/**
-	 *
+	 * Build a GET request
+	 * @param endpoint
+	 * @param includeAuthorizationHeader
+	 * @param errorMessageStore
+	 * @param inFlightStore
+	 */
+	public buildGetRequest<T>(
+		endpoint: string, includeAuthorizationHeader: boolean, errorMessageStore: Writable<string | undefined>,
+		inFlightStore: Writable<boolean>
+	): Request<T> {
+		return this.build(
+			endpoint, HttpMethod.GET, includeAuthorizationHeader, null, errorMessageStore, inFlightStore
+		);
+	}
+
+	/**
+	 * Build a POST request
 	 * @param endpoint
 	 * @param includeAuthorizationHeader
 	 * @param requestPayload
@@ -49,6 +65,56 @@ export class RequestFactory {
 	): Request<T> {
 		return this.build(
 			endpoint, HttpMethod.POST, includeAuthorizationHeader, requestPayload, errorMessageStore, inFlightStore
+		);
+	}
+
+	/**
+	 * Build a PUT request
+	 * @param endpoint
+	 * @param includeAuthorizationHeader
+	 * @param requestPayload
+	 * @param errorMessageStore
+	 * @param inFlightStore
+	 */
+	public buildPutRequest<T>(
+		endpoint: string, includeAuthorizationHeader: boolean, requestPayload: object | null,
+		errorMessageStore: Writable<string | undefined>, inFlightStore: Writable<boolean>
+	): Request<T> {
+		return this.build(
+			endpoint, HttpMethod.PUT, includeAuthorizationHeader, requestPayload, errorMessageStore, inFlightStore
+		);
+	}
+
+	/**
+	 * Build a PATCH request
+	 * @param endpoint
+	 * @param includeAuthorizationHeader
+	 * @param requestPayload
+	 * @param errorMessageStore
+	 * @param inFlightStore
+	 */
+	public buildPatchRequest<T>(
+		endpoint: string, includeAuthorizationHeader: boolean, requestPayload: object | null,
+		errorMessageStore: Writable<string | undefined>, inFlightStore: Writable<boolean>
+	): Request<T> {
+		return this.build(
+			endpoint, HttpMethod.PATCH, includeAuthorizationHeader, requestPayload, errorMessageStore, inFlightStore
+		);
+	}
+
+	/**
+	 * Build a DELETE request
+	 * @param endpoint
+	 * @param includeAuthorizationHeader
+	 * @param errorMessageStore
+	 * @param inFlightStore
+	 */
+	public buildDeleteRequest<T>(
+		endpoint: string, includeAuthorizationHeader: boolean, errorMessageStore: Writable<string | undefined>,
+		inFlightStore: Writable<boolean>
+	): Request<T> {
+		return this.build(
+			endpoint, HttpMethod.DELETE, includeAuthorizationHeader, null, errorMessageStore, inFlightStore
 		);
 	}
 }
