@@ -11,15 +11,8 @@
 		"resolveJsonModule": true,            // Include modules imported with '.json' extension
 		"noEmit": true,                       // Do not emit outputs (handled by Svelte)
 		"sourceMap": true,                    // Enable source maps
-		"baseUrl": ".",                       // Set base URL for relative file paths
-		"paths": {                            // Set paths for module resolution
-			"$lib/*": ["src/lib/*"]
-		},
-		"types": ["svelte"],                  // Include Svelte types
 		"isolatedModules": true               // Transpile each file as a separate module (similar to 'ts.transpileModule')
 	},
-	"include": ["src/**/*.ts", "src/**/*.svelte"], // Files to be included
-	"exclude": ["node_modules/*", "__sapper__/*", "public/*"], // Folders/files to be excluded
 	"extends": "./.svelte-kit/tsconfig.json"
 
 }

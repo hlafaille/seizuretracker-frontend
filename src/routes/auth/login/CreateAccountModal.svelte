@@ -1,12 +1,14 @@
 <script lang="ts">
 	import AlertDanger from '$lib/components/tk/alerts/AlertDanger.svelte';
-	import Button from '$lib/components/buttons/Button.svelte';
-	import EmailLineEdit from '$lib/components/inputs/EmailLineEdit.svelte';
-	import LineEdit from '$lib/components/inputs/LineEdit.svelte';
-	import PasswordLineEdit from '$lib/components/inputs/PasswordLineEdit.svelte';
-	import Modal from '$lib/components/modals/Modal.svelte';
-	import { sendPostRequest } from '$lib/utils/requestHandler/requestSender';
+	import Button from '$lib/components/tk/buttons/Button.svelte';
+	import EmailLineEdit from '$lib/components/tk/inputs/EmailLineEdit.svelte';
+	import LineEdit from '$lib/components/tk/inputs/LineEdit.svelte';
+	import PasswordLineEdit from '$lib/components/tk/inputs/PasswordLineEdit.svelte';
+	import Modal from '$lib/components/tk/modals/Modal.svelte';
 	import { createEventDispatcher } from 'svelte';
+	import { REQUEST_FACTORY } from '$lib/utils/GlobalConstant';
+	import { HttpMethod } from '$lib/utils/requestHandler/HttpMethod';
+	import type { RequestStatePropContext } from '$lib/utils/requestHandler/RequestStatePropContext';
 
 	/**
 	 * TYPES
@@ -51,33 +53,22 @@
 	/**
 	 * Clears the error message
 	 */
-	async function clearErrorMessage() {
+	function clearErrorMessage() {
 		errorMessage = null;
 	}
 	/**
 	 * Send the request to create an account
 	 */
-	async function sendRequest() {
+	async function doCreateAccount() {
 		// set the base state for the request
 		clearErrorMessage();
-		inFlight = true;
 
-		/**@type {Response | null}*/
-		response = null;
-
-		//  do the request
-		try {
-			response = await sendPostRequest('http://localhost:8080/v1/users', requestPayload, false);
-		} catch (e) {
-			if (e instanceof Error) {
-				errorMessage = e.message;
-			}
-		} finally {
-			inFlight = false;
+		let request = REQUEST_FACTORY.build("/auth/session", HttpMethod.POST, false)
+		let context: RequestStatePropContext = {
+			'errorMessageProp': errorMessage,
+			'inFlightProp': inFlight
 		}
-		// emit the account created event
-		/**@type {CreateAccountResponse}*/
-		let responsePayload: CreateAccountResponse = await response?.json();
+		let responsePayload: object = (await request.doRequest(context)).json()
 		dispatch('accountCreated', responsePayload);
 	}
 </script>
@@ -93,7 +84,7 @@
 		</div>
 		<EmailLineEdit id="createAccountEmailAddress" placeholder="Email" bind:text={requestPayload.emailAddress} />
 		<PasswordLineEdit id="createAccountPassword" placeholder="Password" bind:text={requestPayload.password} />
-		<Button id="createAccountSubmit" text="Submit" on:click={sendRequest} />
+		<Button id="createAccountSubmit" text="Submit" on:click={doCreateAccount} />
 	</div>
 </Modal>
 

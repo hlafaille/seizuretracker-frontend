@@ -17,30 +17,40 @@ export class Request {
 	/**
 	 * Send the request
 	 * @param context
+	 * @throws RequestError
 	 */
 	public async doRequest(context: RequestStatePropContext): Promise<Response> {
 		// set the component inFlight prop to true
 		context.inFlightProp = true;
 
 		// make the request
-		const response = await fetch(this.fullUrl, {
-			method: this.httpMethod,
-			headers: getHeaders(this.includeAuthorizationHeader)
-		});
+		try {
+			let response = await fetch(this.fullUrl, {
+				method: this.httpMethod,
+				headers: getHeaders(this.includeAuthorizationHeader)
+			});
 
-		// set the component in flight prop to true
-		context.inFlightProp = false;
+			// handle any unauthorized / forbidden errors
+			if (response.status == 401 || response.status == 403) {
+				throw new RequestError('Unauthorized or forbidden access');
+			}
 
-		// handle any unauthorized / forbidden errors
-		if (response.status == 401 || response.status == 403) {
-			return Promise.reject(new RequestError('Unauthorized or forbidden access'));
+			// handle response
+			let jsonResponse = await response.json() // <-- this might cause an issue if .json() is only callable once
+			if (!response.ok) {
+				throw new RequestError(jsonResponse.message);
+			}
+			return response;
+		} catch (e) {
+			if (e instanceof RequestError) {
+				context.errorMessageProp = e.message;
+			} else if (e instanceof Error) {
+				context.errorMessageProp = "An internal error has occurred.";
+			}
+			throw e;
+		} finally {
+			// set the component in flight prop to true
+			context.inFlightProp = false;
 		}
-
-		// if the response was not ok, set the component errorMessage prop to our responses message
-		let jsonResponse = await response.json() // <-- this might cause an issue if .json() is only callable once
-		if (!response.ok) {
-			context.errorMessageProp = jsonResponse.message
-		}
-		return response;
 	}
 }

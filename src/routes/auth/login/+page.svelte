@@ -1,14 +1,12 @@
 <script lang="ts">
-	import Button from '$lib/components/buttons/Button.svelte';
-	import { sendPostRequest } from '$lib/utils/requestHandler/requestSender';
-	import Card from '$lib/components/cards/Card.svelte';
-	import FlexCenterContainer from '$lib/components/containers/FlexCenterContainer.svelte';
+	import Button from '$lib/components/tk/buttons/Button.svelte';
+	import Card from '$lib/components/tk/cards/Card.svelte';
+	import FlexCenterContainer from '$lib/components/tk/containers/FlexCenterContainer.svelte';
 	import { goto } from '$app/navigation';
-	import Modal from '$lib/components/modals/Modal.svelte';
+	import Modal from '$lib/components/tk/modals/Modal.svelte';
 	import AlertCodeBlock from '$lib/components/tk/alerts/AlertCodeBlock.svelte';
-	import EmailLineEdit from '$lib/components/inputs/EmailLineEdit.svelte';
-	import PasswordLineEdit from '$lib/components/inputs/PasswordLineEdit.svelte';
-	import LineEdit from '$lib/components/inputs/LineEdit.svelte';
+	import EmailLineEdit from '$lib/components/tk/inputs/EmailLineEdit.svelte';
+	import PasswordLineEdit from '$lib/components/tk/inputs/PasswordLineEdit.svelte';
 	import CreateAccountModal from './CreateAccountModal.svelte';
 	import AlertSuccess from '$lib/components/tk/alerts/AlertSuccess.svelte';
 	let loginRequestPayload: { email: string | undefined; password: string | undefined } = {
@@ -50,12 +48,6 @@
 	function handleOnAccountCreated() {
 		toggleCreateAccountModal();
 		newAccountCreated = true;
-	}
-	/**
-	 * Clears any queued error message
-	 */
-	function clearErrorMessage() {
-		errorMessage = null;
 	}
 
 	/**
