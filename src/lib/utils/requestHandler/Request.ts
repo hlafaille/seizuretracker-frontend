@@ -7,11 +7,13 @@ export class Request {
 	private readonly fullUrl: string;
 	private readonly httpMethod: HttpMethod;
 	private readonly includeAuthorizationHeader: boolean;
+	private readonly requestPayload: object | null;
 
-	constructor(fullUrl: string, httpMethod: HttpMethod, includeAuthorizationHeader: boolean) {
+	constructor(fullUrl: string, httpMethod: HttpMethod, includeAuthorizationHeader: boolean, requestPayload: object | null) {
 		this.fullUrl = fullUrl;
 		this.httpMethod = httpMethod;
 		this.includeAuthorizationHeader = includeAuthorizationHeader;
+		this.requestPayload = requestPayload;
 	}
 
 	/**
@@ -27,7 +29,8 @@ export class Request {
 		try {
 			let response = await fetch(this.fullUrl, {
 				method: this.httpMethod,
-				headers: getHeaders(this.includeAuthorizationHeader)
+				headers: getHeaders(this.includeAuthorizationHeader),
+				body: JSON.stringify(this.requestPayload)
 			});
 
 			// handle any unauthorized / forbidden errors

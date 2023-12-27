@@ -63,12 +63,12 @@
 		// set the base state for the request
 		clearErrorMessage();
 
-		let request = REQUEST_FACTORY.build("/auth/session", HttpMethod.POST, false)
-		let context: RequestStatePropContext = {
+		let request = REQUEST_FACTORY.buildPostRequest("/auth/session", false, null)
+		let propContext: RequestStatePropContext = {
 			'errorMessageProp': errorMessage,
 			'inFlightProp': inFlight
 		}
-		let responsePayload: object = (await request.doRequest(context)).json()
+		let responsePayload: object = (await request.doRequest(propContext)).json()
 		dispatch('accountCreated', responsePayload);
 	}
 </script>

@@ -31,7 +31,7 @@
 	 * @param mood
 	 */
 	async function doMoodSurveyEntrySubmission(mood: MoodSurveyAllowedMoods) {
-		let request: Request = REQUEST_FACTORY.build('/moodSurvey', HttpMethod.POST, true);
+		let request: Request = REQUEST_FACTORY.buildPostRequest('/moodSurvey', true, null);
 		let context: RequestStatePropContext = {
 			'errorMessageProp': errorMessage,
 			'inFlightProp': inFlight
