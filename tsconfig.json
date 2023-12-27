@@ -1,0 +1,18 @@
+{
+	"compilerOptions": {
+		"target": "es6",                      // Set the JavaScript version for output
+		"module": "es2020",                   // Use ES2020 modules
+		"strict": true,                       // Enables strict mode
+		"moduleResolution": "node",           // Use Node.js module resolution
+		"skipLibCheck": true,                 // Skip type checking of all declaration files (*.d.ts)
+		"forceConsistentCasingInFileNames": true, // Disallow inconsistently-cased references to the same file.
+		"esModuleInterop": true,              // Enables compatibility with Babel/TypeScript modules
+		"allowSyntheticDefaultImports": true, // Allow default imports from modules with no default export
+		"resolveJsonModule": true,            // Include modules imported with '.json' extension
+		"noEmit": true,                       // Do not emit outputs (handled by Svelte)
+		"sourceMap": true,                    // Enable source maps
+		"isolatedModules": true               // Transpile each file as a separate module (similar to 'ts.transpileModule')
+	},
+	"extends": "./.svelte-kit/tsconfig.json"
+
+}

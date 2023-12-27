@@ -1,33 +1,15 @@
 <script lang="ts">
 	import AlertDanger from '$lib/components/tk/alerts/AlertDanger.svelte';
-	import Button from '$lib/components/buttons/Button.svelte';
-	import EmailLineEdit from '$lib/components/inputs/EmailLineEdit.svelte';
-	import LineEdit from '$lib/components/inputs/LineEdit.svelte';
-	import PasswordLineEdit from '$lib/components/inputs/PasswordLineEdit.svelte';
-	import Modal from '$lib/components/modals/Modal.svelte';
-	import { sendPostRequest } from '$lib/utils/requestHandler/requestSender';
+	import Button from '$lib/components/tk/buttons/Button.svelte';
+	import EmailLineEdit from '$lib/components/tk/inputs/EmailLineEdit.svelte';
+	import LineEdit from '$lib/components/tk/inputs/LineEdit.svelte';
+	import PasswordLineEdit from '$lib/components/tk/inputs/PasswordLineEdit.svelte';
+	import Modal from '$lib/components/tk/modals/Modal.svelte';
 	import { createEventDispatcher } from 'svelte';
-
-	/**
-	 * TYPES
-	 */
-
-	/**
-	 * POST /v1/users request payload
-	 */
-	interface CreateAccountRequest {
-		firstName: string | undefined;
-		lastName: string | undefined;
-		emailAddress: string | undefined;
-		password: string | undefined;
-	}
-
-	/**
-	 * POST /v1/users request response
-	 */
-	interface CreateAccountResponse {
-		userId: string | undefined;
-	}
+	import { REQUEST_FACTORY } from '$lib/utils/GlobalConstant';
+	import { writable, type Writable } from 'svelte/store';
+	import type { CreateAccountRequest } from '$lib/dto/user/CreateAccountRequest';
+	import type { CreateAccountResponse } from '$lib/dto/user/CreateAccountResponse';
 
 	/**
 	 * EVENTS
@@ -35,12 +17,16 @@
 	const dispatch = createEventDispatcher();
 
 	/**
+	 * STORES
+	 */
+	let errorMessage: Writable<string | undefined> = writable(undefined);
+	let inFlight: Writable<boolean> = writable(false);
+
+	/**
 	 * PROPS
 	 */
-	export let errorMessage: string | null = null;
-	export let inFlight: boolean = false;
 	export let isActive: boolean = false;
-	let response: Response | null = null;
+
 	let requestPayload: CreateAccountRequest = {
 		firstName: undefined,
 		lastName: undefined,
@@ -49,52 +35,41 @@
 	};
 
 	/**
-	 * Clears the error message
+	 * Clear the error message store
 	 */
-	async function clearErrorMessage() {
-		errorMessage = null;
+	function clearErrorMessage() {
+		errorMessage.set(undefined);
 	}
+
 	/**
 	 * Send the request to create an account
 	 */
-	async function sendRequest() {
-		// set the base state for the request
-		clearErrorMessage();
-		inFlight = true;
-
-		/**@type {Response | null}*/
-		response = null;
-
-		//  do the request
-		try {
-			response = await sendPostRequest('http://localhost:8080/v1/users', requestPayload, false);
-		} catch (e) {
-			if (e instanceof Error) {
-				errorMessage = e.message;
-			}
-		} finally {
-			inFlight = false;
-		}
-		// emit the account created event
-		/**@type {CreateAccountResponse}*/
-		let responsePayload: CreateAccountResponse = await response?.json();
+	async function doCreateAccount() {
+		let request = REQUEST_FACTORY.buildPostRequest<CreateAccountResponse>(
+			'/users/createAccount',
+			false,
+			requestPayload,
+			errorMessage,
+			inFlight,
+		);
+		let responsePayload = (await request.doRequest());
 		dispatch('accountCreated', responsePayload);
 	}
 </script>
 
 <Modal title="Create an Account" bind:isActive>
-	<div class="grid-rows-auto grid gap-2">
-		{#if errorMessage}
-			<AlertDanger on:click={clearErrorMessage} text={errorMessage} />
-		{/if}
-		<div class="grid grid-cols-2 gap-2">
-			<LineEdit id="createAccountFirstName" placeholder="First Name" bind:text={requestPayload.firstName} />
-			<LineEdit id="createAccountLastName" placeholder="Last Name" bind:text={requestPayload.lastName} />
-		</div>
-		<EmailLineEdit id="createAccountEmailAddress" placeholder="Email" bind:text={requestPayload.emailAddress} />
-		<PasswordLineEdit id="createAccountPassword" placeholder="Password" bind:text={requestPayload.password} />
-		<Button id="createAccountSubmit" text="Submit" on:click={sendRequest} />
-	</div>
+    <div class="grid-rows-auto grid gap-2">
+        {#if $errorMessage}
+            <AlertDanger on:click={clearErrorMessage} text={$errorMessage} />
+        {/if}
+        <div class="grid grid-cols-2 gap-2">
+            <LineEdit id="createAccountFirstName" placeholder="First Name" bind:text={requestPayload.firstName} />
+            <LineEdit id="createAccountLastName" placeholder="Last Name" bind:text={requestPayload.lastName} />
+        </div>
+        <EmailLineEdit id="createAccountEmailAddress" placeholder="Email" bind:text={requestPayload.emailAddress} />
+        <PasswordLineEdit id="createAccountPassword" placeholder="Password" bind:text={requestPayload.password} />
+        <Button id="createAccountSubmit" text="Submit" on:click={doCreateAccount} />
+    </div>
 </Modal>
 
 <style></style>

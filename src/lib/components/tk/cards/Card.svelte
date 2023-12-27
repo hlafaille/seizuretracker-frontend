@@ -27,7 +27,7 @@
 		@apply select-none;
 	}
 	.card-subtitle {
-		@apply pb-2 font-semibold;
+		@apply pb-3 font-semibold;
 		@apply text-neutral-300;
 		@apply select-none;
 	}
