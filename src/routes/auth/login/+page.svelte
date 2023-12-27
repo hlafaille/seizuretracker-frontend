@@ -32,7 +32,7 @@
 	};
 
 	const errorMessage: Writable<string | undefined> = writable(undefined);
-  const inFlight: Writable<boolean> = writable(false);
+	const inFlight: Writable<boolean> = writable(false);
 
 	//export let inFlight: boolean | undefined = requestStatePropContext.inFlightProp.value;
 
@@ -61,17 +61,13 @@
 	 */
 	async function doLogin() {
 		let request = REQUEST_FACTORY.buildPostRequest('/auth/session', false, loginRequestPayload, errorMessage, inFlight);
-		try {
-			let response = await request.doRequest();
-			if (response.status === 201) {
-				let responsePayload = await response.json();
-				const expirationDate = new Date();
-				expirationDate.setHours(expirationDate.getHours() + 3);
-				addCookie('session', responsePayload.accessToken, expirationDate);
-				await goto('/');
-			}
-		} catch (ignored) {
-		} finally {
+		let response = await request.doRequest();
+		if (response.status === 201) {
+			let responsePayload = await response.json();
+			const expirationDate = new Date();
+			expirationDate.setHours(expirationDate.getHours() + 3);
+			addCookie('session', responsePayload.accessToken, expirationDate);
+			await goto('/');
 		}
 	}
 </script>
