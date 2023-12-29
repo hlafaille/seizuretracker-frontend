@@ -20,12 +20,12 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan hlafaille.xyz >> ~/.ssh/known_hosts
 
-      - name: Execute remote script
+      - name: Execute remote commands
         run: |
           ssh hunter@hlafaille.xyz "
-          export SEIZURETRACKER_FRONTEND_TAG=${{ github.sha }}
-          cd ${{ env.WEBSERVICES_PATH }}
-          echo $PWD
-          docker compose pull seizuretracker_frontend
-          docker compose up -d --force-recreate seizuretracker_frontend
+            export SEIZURETRACKER_FRONTEND_TAG=$(echo ${{ github.sha }})
+            cd $(echo ${{ env.WEBSERVICES_PATH }})
+            echo \$PWD
+            docker compose pull seizuretracker_frontend
+            docker compose up -d --force-recreate seizuretracker_frontend
           "
