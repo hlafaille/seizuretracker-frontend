@@ -1,0 +1,30 @@
+name: Svelte CI
+
+on:
+  push:
+    tags:
+      - '*'
+  workflow_run:
+    workflows: [ "Svelte CI" ]
+    types:
+      - completed
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DEPLOY_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan hlafaille.xyz >> ~/.ssh/known_hosts
+
+      - name: Execute remote script
+        run: |
+          ssh hunter@hlafaille.xyz "
+          export SEIZURETRACKER_FRONTEND_TAG=${{ github.sha }}
+          cd ${{ env.WEBSERVICES_PATH }}
+          docker compose pull seizuretracker_frontend
+          docker compose up -d --force-recreate seizuretracker_frontend
+          "

@@ -1,0 +1,23 @@
+name: Svelte CI
+
+on:
+  push:
+    branches-ignore:
+      - main
+      - develop
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build image
+        run: docker build . -t git.hlafaille.xyz/mindmeld/seizuretracker-frontend:${{ github.sha }}
+
+      - name: Registry login
+        run: docker login -u ${{ secrets.registry_username }} -p ${{ secrets.registry_password }} git.hlafaille.xyz
+
+      - name: Push image
+        run: docker push git.hlafaille.xyz/mindmeld/seizuretracker-frontend:${{ github.sha }}
