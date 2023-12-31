@@ -2,6 +2,7 @@ import type { HttpMethod } from '$lib/utils/requesthandler/HttpMethod';
 import { getHeaders } from '$lib/utils/requesthandler/HeaderHelper';
 import { RequestError } from '$lib/utils/requesthandler/RequestError';
 import type { Writable } from 'svelte/store';
+import { env } from '$env/dynamic/public';
 
 
 export class Request<T> {
@@ -40,13 +41,19 @@ export class Request<T> {
 				body: JSON.stringify(this.requestPayload)
 			});
 
-			// handle any unauthorized / forbidden errors
+			let jsonResponse = await response.json();
+
+			// handle any unauthorized / forbidden / internal server errors
 			if (response.status == 401 || response.status == 403) {
+				window.location.assign("/login");
 				throw new RequestError('Unauthorized or forbidden access');
+			}
+			else if (response.status == 500) {
+				window.location.assign("/login");
+				throw new RequestError(jsonResponse.message)
 			}
 
 			// handle response
-			let jsonResponse = await response.json(); // <-- this might cause an issue if .json() is only callable once
 			if (!response.ok) {
 				throw new RequestError(jsonResponse.message);
 			}
