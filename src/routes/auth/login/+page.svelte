@@ -16,6 +16,7 @@
 	import type { CreateSessionRequest } from '$lib/dto/auth/CreateSessionRequest';
 	import type { CreateAccountResponse } from '$lib/dto/user/CreateAccountResponse';
 	import type { CreateSessionResponse } from '$lib/dto/auth/CreateSessionResponse';
+  import { STORE_AUTH_LOGIN_ERROR_MESSAGE } from '$lib/utils/GlobalStore';
 
 	export let loginRequestPayload: CreateSessionRequest = {
 		email: undefined,
@@ -30,7 +31,6 @@
 		password: undefined
 	};
 
-	const errorMessage: Writable<string | undefined> = writable(undefined);
 	const inFlight: Writable<boolean> = writable(false);
 
 	let isCreateAccountModalActive: boolean = false;
@@ -56,7 +56,7 @@
 	 * Send the request to log in
 	 */
 	async function doLogin() {
-		let request = REQUEST_FACTORY.buildPostRequest<CreateSessionResponse>('/auth/session', false, loginRequestPayload, errorMessage, inFlight);
+		let request = REQUEST_FACTORY.buildPostRequest<CreateSessionResponse>('/auth/session', false, loginRequestPayload, STORE_AUTH_LOGIN_ERROR_MESSAGE, inFlight);
 		let responsePayload = await request.doRequest();
 		const expirationDate = new Date();
 		expirationDate.setHours(expirationDate.getHours() + 3);
@@ -67,11 +67,11 @@
 </script>
 
 <!-- Error Modal -->
-{#if $errorMessage}
+{#if $STORE_AUTH_LOGIN_ERROR_MESSAGE}
     <Modal title="Uh-oh!">
         <div class="flex flex-col space-y-2">
             <p>Looks like there was an error...</p>
-            <AlertCodeBlock text={$errorMessage} />
+            <AlertCodeBlock text={$STORE_AUTH_LOGIN_ERROR_MESSAGE} />
         </div>
     </Modal>
 {/if}

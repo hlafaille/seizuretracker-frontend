@@ -1,6 +1,6 @@
 <script lang="ts">
-	export let text: string | null = null;
-	if (text === null) {
+	export let text: string | undefined;
+	if (text === undefined) {
 		text = 'Unspecified';
 	}
 </script>

@@ -3,6 +3,8 @@ import { getHeaders } from '$lib/utils/requesthandler/HeaderHelper';
 import { RequestError } from '$lib/utils/requesthandler/RequestError';
 import type { Writable } from 'svelte/store';
 import { env } from '$env/dynamic/public';
+import { STORE_AUTH_LOGIN_ERROR_MESSAGE } from '$lib/utils/GlobalStore';
+import { goto } from '$app/navigation';
 
 
 export class Request<T> {
@@ -45,12 +47,11 @@ export class Request<T> {
 
 			// handle any unauthorized / forbidden / internal server errors
 			if (response.status == 401 || response.status == 403) {
-				window.location.assign("/login");
+				STORE_AUTH_LOGIN_ERROR_MESSAGE.set('Your login has been invalidated. Please re-login.');
+				await goto('/auth/login');
 				throw new RequestError('Unauthorized or forbidden access');
-			}
-			else if (response.status == 500) {
-				window.location.assign("/login");
-				throw new RequestError(jsonResponse.message)
+			} else if (response.status == 500) {
+				throw new RequestError(jsonResponse.message);
 			}
 
 			// handle response
@@ -61,6 +62,12 @@ export class Request<T> {
 		} catch (e) {
 			if (e instanceof RequestError) {
 				this.errorMessageStore.set(e.message);
+			} else if (e instanceof TypeError) {
+				let errorMessage = e.message.toLowerCase();
+				if (errorMessage.includes('failed') || errorMessage.includes('error')) {
+					STORE_AUTH_LOGIN_ERROR_MESSAGE.set('Unable to communicate with the server. Please check your network connection.');
+					await goto('/auth/login');
+				}
 			} else if (e instanceof Error) {
 				this.errorMessageStore.set('An internal error has occurred.');
 			}

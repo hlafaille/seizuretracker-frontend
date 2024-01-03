@@ -10,7 +10,12 @@ export function getHeaders(authHeader = true) {
 		'Content-Type': 'application/json'
 	};
 	if (authHeader) {
-		requestHeaders.Authorization = `Bearer ${getCookie('session')!}`;
+		let sessionCookieValue = getCookie('session')
+		if (typeof sessionCookieValue == 'string') {
+			requestHeaders.Authorization = `Bearer ${getCookie('session')!}`;
+		} else {
+			console.debug("session cookie value was null, ignoring")
+		}
 	}
 	return requestHeaders;
 }
